@@ -3,8 +3,6 @@ package coreball.schedulestacker;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by Changyuan Lin on 22 Jan 2018.
@@ -33,6 +31,7 @@ public class ScheduleStacker {
 		findFileButton = gui.getFindFileButton();
 		scheduleField = gui.getScheduleField();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		allClasses = new Glue();
 	}
 
 	private void initListeners() {
