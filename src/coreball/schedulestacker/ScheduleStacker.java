@@ -27,7 +27,7 @@ public class ScheduleStacker {
 
 	private void initComponents() {
 		gui = new ScheduleStackerGUI();
-		fileChooser = new JFileChooser();
+		fileChooser = new JFileChooser(); // TODO Add filter for only .txt
 		findFileButton = gui.getFindFileButton();
 		scheduleField = gui.getScheduleField();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -41,8 +41,10 @@ public class ScheduleStacker {
 	private class findFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			fileChooser.showOpenDialog(gui);
-			scheduleField.setText(fileChooser.getSelectedFile().toString());
+			int reply = fileChooser.showOpenDialog(gui);
+			if(reply == JFileChooser.APPROVE_OPTION) {
+				scheduleField.setText(fileChooser.getSelectedFile().toString());
+			}
 		}
 	}
 
