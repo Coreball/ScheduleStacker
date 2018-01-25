@@ -15,21 +15,16 @@ public class ScheduleStackerGUI extends JFrame {
 	private JLabel homeTitle;
 	private JLabel homeDesc;
 	private JButton findFileButton;
-	private JTextField scheduleField;
+	private JButton loadFileButton;
+	private JTextField filePathField;
 
 	public ScheduleStackerGUI() {
 		setContentPane(mainPanel);
 		setTitle("ScheduleStacker");
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch(ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch(InstantiationException e) {
-			e.printStackTrace();
-		} catch(IllegalAccessException e) {
-			e.printStackTrace();
-		} catch(UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+		} catch(ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
+			JOptionPane.showMessageDialog(this, "Unable to set look and feel for some reason");
 		}
 		SwingUtilities.updateComponentTreeUI(this);
 		pack();
@@ -39,7 +34,11 @@ public class ScheduleStackerGUI extends JFrame {
 		return findFileButton;
 	}
 
-	public JTextField getScheduleField() {
-		return scheduleField;
+	public JButton getLoadFileButton() {
+		return loadFileButton;
+	}
+
+	public JTextField getFilePathField() {
+		return filePathField;
 	}
 }

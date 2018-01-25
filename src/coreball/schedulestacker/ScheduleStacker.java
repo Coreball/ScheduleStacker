@@ -3,6 +3,9 @@ package coreball.schedulestacker;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 /**
  * Created by Changyuan Lin on 22 Jan 2018.
@@ -12,7 +15,8 @@ public class ScheduleStacker {
 	private ScheduleStackerGUI gui;
 	private JFileChooser fileChooser;
 	private JButton findFileButton;
-	private JTextField scheduleField;
+	private JButton loadFileButton;
+	private JTextField filePathField;
 
 	private Glue allClasses;
 
@@ -29,13 +33,58 @@ public class ScheduleStacker {
 		gui = new ScheduleStackerGUI();
 		fileChooser = new JFileChooser(); // TODO Add filter for only .txt
 		findFileButton = gui.getFindFileButton();
-		scheduleField = gui.getScheduleField();
+		loadFileButton = gui.getLoadFileButton();
+		filePathField = gui.getFilePathField();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		allClasses = new Glue();
 	}
 
 	private void initListeners() {
 		findFileButton.addActionListener(new findFileButtonListener());
+		loadFileButton.addActionListener(new loadFileButtonListener());
+	}
+
+	/**
+	 * Load a Master Schedule
+	 * @param in file to be read
+	 */
+	private void loadFile(File in) {
+		try {
+			Scanner sc = new Scanner(in);
+			while(sc.hasNextLine()) {
+				String line = sc.nextLine();
+				if(!line.isEmpty() && line.charAt(0) != '#') { // Ignore pound signs
+					System.out.println(line);
+					lineToGlue(line);
+				}
+			}
+		} catch(FileNotFoundException e) {
+			JOptionPane.showMessageDialog(gui, "File not found!!", "Error", JOptionPane.ERROR_MESSAGE);
+		} catch(IllegalArgumentException e) {
+			JOptionPane.showMessageDialog(gui, "File formatted incorrectly!!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * Process a line in MS and add to allClasses
+	 * @param line singular line ripped from Master Schedule
+	 */
+	private void lineToGlue(String line) {
+		if(!Character.isDigit(line.charAt(0))) { // Die if not a number, warn user something is wrong
+			throw new IllegalArgumentException();
+		}
+		try {
+			int type = Character.getNumericValue(line.charAt(0));
+			String firstBit = line.substring(0, line.indexOf("(A-"));
+			String secondBit = line.substring(line.lastIndexOf(')') + 1).trim(); // last index b/c (Teamed) is a course name
+			secondBit = secondBit.substring(secondBit.indexOf(' ') + 1); // Advance to teacher's last name
+			String courseName = firstBit.substring(2, firstBit.lastIndexOf(" "));
+			String period = firstBit.substring(firstBit.lastIndexOf(' ') + 1);
+			String teacher = secondBit.substring(0, secondBit.indexOf(' ') - 1);
+			allClasses.type(type).getPeriodsFor(courseName).getTeachersFor(period).addTeacher(teacher);
+		} catch(Exception e) {
+			throw new IllegalArgumentException(); // TODO test this
+		}
 	}
 
 	private class findFileButtonListener implements ActionListener {
@@ -43,8 +92,16 @@ public class ScheduleStacker {
 		public void actionPerformed(ActionEvent e) {
 			int reply = fileChooser.showOpenDialog(gui);
 			if(reply == JFileChooser.APPROVE_OPTION) {
-				scheduleField.setText(fileChooser.getSelectedFile().toString());
+				filePathField.setText(fileChooser.getSelectedFile().toString());
 			}
+		}
+	}
+
+	private class loadFileButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			File file = new File(filePathField.getText());
+			loadFile(file);
 		}
 	}
 
