@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class Glue {
 
 	// Primary data structure for storing values
-	private ArrayList<ClassList> sticky;
+	private ArrayList<CourseList> sticky;
 	// It's actually ArrayList<HashMap<String, HashMap<String, ArrayList<String>>>> but that's hard to understand
 
 	/*
@@ -17,9 +17,9 @@ public class Glue {
 	 */
 
 	public Glue() {
-		sticky = new ArrayList<ClassList>();
+		sticky = new ArrayList<CourseList>();
 		for(int i = 0; i < 8; i++) {
-			sticky.add(new ClassList());
+			sticky.add(new CourseList());
 		}
 	}
 
@@ -28,30 +28,30 @@ public class Glue {
 	 * @param type the class type
 	 * @return inner class list
 	 */
-	public ClassList type(int type) {
+	public CourseList type(int type) {
 		return sticky.get(type - 1);
 	}
 
 	/**
-	 * Class representing the different school classes of a type
+	 * Class representing the different school course of a type
 	 */
-	public class ClassList extends HashMap<String, PeriodList> {
+	public class CourseList extends HashMap<String, PeriodList> {
 
-		public PeriodList getPeriodsFor(String className) {
-			if(!containsKey(className)) { // TODO Might remove later, not sure if necessary based on use
-				addClass(className);
+		public PeriodList getPeriodsFor(String courseName) {
+			if(!containsKey(courseName)) { // TODO Might remove later, not sure if necessary based on use
+				addClass(courseName);
 			}
-			return get(className);
+			return get(courseName);
 		}
 
-		public void addClass(String className) {
-			put(className, new PeriodList()); // Warning kills the previous PeriodList if there was one
+		public void addClass(String courseName) {
+			put(courseName, new PeriodList()); // Warning kills the previous PeriodList if there was one
 		}
 
 	}
 
 	/**
-	 * Represents all periods a particular school class is offered
+	 * Represents all periods a particular school course is offered
 	 */
 	public class PeriodList extends HashMap<String, TeacherList> {
 		public TeacherList getTeachersFor(String period) {
@@ -63,7 +63,7 @@ public class Glue {
 	}
 
 	/**
-	 * Represents all teachers teaching a particular school class
+	 * Represents all teachers teaching a particular school course
 	 */
 	public class TeacherList extends ArrayList<String> {
 		public void addTeacher(String name) {
