@@ -18,6 +18,7 @@ public class ScheduleStacker {
 	private JButton loadFileButton;
 	private JButton processButton;
 	private JTextField filePathField;
+	private JList[] typeLists;
 
 	private Glue allClasses;
 
@@ -39,6 +40,7 @@ public class ScheduleStacker {
 		loadFileButton = gui.getLoadFileButton();
 		processButton = gui.getProcessButton();
 		filePathField = gui.getFilePathField();
+		typeLists = gui.getTypeListArray();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		allClasses = new Glue();
 	}
@@ -92,11 +94,19 @@ public class ScheduleStacker {
 		}
 	}
 
+	private void updateTypeLists() {
+		for(int i = 1; i <= 8; i++) {
+			for(String courseName : allClasses.type(i).keySet()) {
+				// TODO
+			}
+		}
+	}
+
 	/**
 	 * Find what off periods the user wants
 	 */
 	private void findOffPeriods() {
-		JCheckBox[] periods = gui.getCheckPeriods();
+		JCheckBox[] periods = gui.getCheckPeriodArray();
 		offPeriodsDesired = new boolean[8];
 		for(int i = 0; i < 8; i++) {
 			offPeriodsDesired[i] = periods[i].isSelected();

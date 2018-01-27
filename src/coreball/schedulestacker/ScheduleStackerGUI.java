@@ -18,14 +18,15 @@ public class ScheduleStackerGUI extends JFrame {
 	private JButton loadFileButton;
 	private JTextField filePathField;
 	private JButton processButton;
-	private JList list1;
-	private JList list2;
-	private JList list3;
-	private JList list4;
-	private JList list5;
-	private JList list6;
-	private JList list7;
-	private JList list8;
+	private JList type1;
+	private JList type2;
+	private JList type3;
+	private JList type4;
+	private JList type5;
+	private JList type6;
+	private JList type7;
+	private JList type8;
+	private JList[] typeListArray;
 	private JCheckBox checkPeriod1;
 	private JCheckBox checkPeriod2;
 	private JCheckBox checkPeriod3;
@@ -34,7 +35,7 @@ public class ScheduleStackerGUI extends JFrame {
 	private JCheckBox checkPeriod6;
 	private JCheckBox checkPeriod7;
 	private JCheckBox checkPeriod8;
-	private JCheckBox[] periods;
+	private JCheckBox[] checkPeriodArray;
 
 	public ScheduleStackerGUI() {
 		setContentPane(mainPanel);
@@ -50,15 +51,28 @@ public class ScheduleStackerGUI extends JFrame {
 	}
 
 	private void makeCheckPeriodArray() {
-		periods = new JCheckBox[8];
-		periods[0] = checkPeriod1;
-		periods[1] = checkPeriod2;
-		periods[2] = checkPeriod3;
-		periods[3] = checkPeriod4;
-		periods[4] = checkPeriod5;
-		periods[5] = checkPeriod6;
-		periods[6] = checkPeriod7;
-		periods[7] = checkPeriod8;
+		checkPeriodArray = new JCheckBox[8];
+		checkPeriodArray[0] = checkPeriod1;
+		checkPeriodArray[1] = checkPeriod2;
+		checkPeriodArray[2] = checkPeriod3;
+		checkPeriodArray[3] = checkPeriod4;
+		checkPeriodArray[4] = checkPeriod5;
+		checkPeriodArray[5] = checkPeriod6;
+		checkPeriodArray[6] = checkPeriod7;
+		checkPeriodArray[7] = checkPeriod8;
+	}
+
+	private void makeTypeListArray() {
+		typeListArray = new JList[8];
+		typeListArray[0] = type1;
+		typeListArray[1] = type2;
+		typeListArray[2] = type3;
+		typeListArray[3] = type4;
+		typeListArray[4] = type5;
+		typeListArray[5] = type6;
+		typeListArray[6] = type7;
+		typeListArray[7] = type8;
+		// TODO something about list models
 	}
 
 	public JButton getFindFileButton() {
@@ -77,7 +91,12 @@ public class ScheduleStackerGUI extends JFrame {
 		return filePathField;
 	}
 
-	public JCheckBox[] getCheckPeriods() {
-		return periods;
+	public JCheckBox[] getCheckPeriodArray() {
+		return checkPeriodArray;
 	}
+
+	public JList[] getTypeListArray() {
+		return typeListArray;
+	}
+
 }
