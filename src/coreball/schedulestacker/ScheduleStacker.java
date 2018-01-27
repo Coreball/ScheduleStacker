@@ -16,9 +16,12 @@ public class ScheduleStacker {
 	private JFileChooser fileChooser;
 	private JButton findFileButton;
 	private JButton loadFileButton;
+	private JButton processButton;
 	private JTextField filePathField;
 
 	private Glue allClasses;
+
+	private boolean[] offPeriodsDesired;
 
 	public ScheduleStacker() {
 		initComponents();
@@ -34,6 +37,7 @@ public class ScheduleStacker {
 		fileChooser = new JFileChooser(); // TODO Add filter for only .txt
 		findFileButton = gui.getFindFileButton();
 		loadFileButton = gui.getLoadFileButton();
+		processButton = gui.getProcessButton();
 		filePathField = gui.getFilePathField();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		allClasses = new Glue();
@@ -42,6 +46,7 @@ public class ScheduleStacker {
 	private void initListeners() {
 		findFileButton.addActionListener(new findFileButtonListener());
 		loadFileButton.addActionListener(new loadFileButtonListener());
+		processButton.addActionListener(new processButtonListener());
 	}
 
 	/**
@@ -87,6 +92,26 @@ public class ScheduleStacker {
 		}
 	}
 
+	/**
+	 * Find what off periods the user wants
+	 */
+	private void findOffPeriods() {
+		JCheckBox[] periods = gui.getCheckPeriods();
+		offPeriodsDesired = new boolean[8];
+		for(int i = 0; i < 8; i++) {
+			offPeriodsDesired[i] = periods[i].isSelected();
+		}
+	}
+
+	/**
+	 * Find if user wants specific off period
+	 * @param period desired
+	 * @return if wants that off
+	 */
+	private boolean wantsOffPeriod(int period) {
+		return offPeriodsDesired[period - 1];
+	}
+
 	private class findFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -102,6 +127,14 @@ public class ScheduleStacker {
 		public void actionPerformed(ActionEvent e) {
 			File file = new File(filePathField.getText());
 			loadFile(file);
+		}
+	}
+
+	private class processButtonListener implements ActionListener {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			findOffPeriods();
+			// Process stuff
 		}
 	}
 
