@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -108,10 +109,17 @@ public class ScheduleStacker {
 		}
 	}
 
+	/**
+	 * Update the list models controlling the JLists with new data from the file
+	 */
 	private void updateTypeLists() {
 		for(int i = 1; i <= 8; i++) {
-			for(String courseName : allClasses.type(i).keySet()) {
-				// TODO
+			DefaultListModel<String> currentList = typeListInternals.get(i - 1);
+			currentList.clear();
+			ArrayList<String> temporary = new ArrayList<>(allClasses.type(i).keySet());
+			Collections.sort(temporary); // just dump in temp array to sort. better solution?
+			for(String str : temporary) {
+				currentList.addElement(str);
 			}
 		}
 	}
@@ -151,6 +159,7 @@ public class ScheduleStacker {
 		public void actionPerformed(ActionEvent e) {
 			File file = new File(filePathField.getText());
 			loadFile(file);
+			updateTypeLists();
 		}
 	}
 
