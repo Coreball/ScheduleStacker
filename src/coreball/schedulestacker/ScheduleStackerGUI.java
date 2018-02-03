@@ -48,6 +48,7 @@ public class ScheduleStackerGUI extends JFrame {
 		SwingUtilities.updateComponentTreeUI(this);
 		setSize(1200, 750);
 		makeCheckPeriodArray();
+		makeTypeListArray(); // FORGOT THIS
 	}
 
 	private void makeCheckPeriodArray() {
@@ -72,7 +73,6 @@ public class ScheduleStackerGUI extends JFrame {
 		typeListArray[5] = type6;
 		typeListArray[6] = type7;
 		typeListArray[7] = type8;
-		// TODO something about list models
 	}
 
 	public JButton getFindFileButton() {
