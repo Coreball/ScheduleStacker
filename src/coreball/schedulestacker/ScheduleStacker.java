@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -18,7 +19,8 @@ public class ScheduleStacker {
 	private JButton loadFileButton;
 	private JButton processButton;
 	private JTextField filePathField;
-	private JList[] typeLists;
+	private JList<String>[] typeListShells;
+	private ArrayList<DefaultListModel<String>> typeListInternals;
 
 	private Glue allClasses;
 
@@ -40,7 +42,9 @@ public class ScheduleStacker {
 		loadFileButton = gui.getLoadFileButton();
 		processButton = gui.getProcessButton();
 		filePathField = gui.getFilePathField();
-		typeLists = gui.getTypeListArray();
+		typeListShells = gui.getTypeListArray();
+		typeListInternals = new ArrayList<>();
+		initTypeListInternals();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		allClasses = new Glue();
 	}
@@ -49,6 +53,16 @@ public class ScheduleStacker {
 		findFileButton.addActionListener(new findFileButtonListener());
 		loadFileButton.addActionListener(new loadFileButtonListener());
 		processButton.addActionListener(new processButtonListener());
+	}
+
+	/**
+	 * Init the list models for the JLists and assign them
+	 */
+	private void initTypeListInternals() {
+		for(int i = 0; i < typeListShells.length; i++) {
+			typeListInternals.add(new DefaultListModel<>());
+			typeListShells[i].setModel(typeListInternals.get(i));
+		}
 	}
 
 	/**

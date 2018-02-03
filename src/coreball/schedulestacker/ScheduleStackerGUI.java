@@ -18,15 +18,15 @@ public class ScheduleStackerGUI extends JFrame {
 	private JButton loadFileButton;
 	private JTextField filePathField;
 	private JButton processButton;
-	private JList type1;
-	private JList type2;
-	private JList type3;
-	private JList type4;
-	private JList type5;
-	private JList type6;
-	private JList type7;
-	private JList type8;
-	private JList[] typeListArray;
+	private JList<String> type1;
+	private JList<String> type2;
+	private JList<String> type3;
+	private JList<String> type4;
+	private JList<String> type5;
+	private JList<String> type6;
+	private JList<String> type7;
+	private JList<String> type8;
+	private JList<String>[] typeListArray;
 	private JCheckBox checkPeriod1;
 	private JCheckBox checkPeriod2;
 	private JCheckBox checkPeriod3;
@@ -95,7 +95,7 @@ public class ScheduleStackerGUI extends JFrame {
 		return checkPeriodArray;
 	}
 
-	public JList[] getTypeListArray() {
+	public JList<String>[] getTypeListArray() {
 		return typeListArray;
 	}
 
