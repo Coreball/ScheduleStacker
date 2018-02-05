@@ -1,6 +1,7 @@
 package coreball.schedulestacker;
 
 /**
+ * Driver class
  * Created by Changyuan Lin on 22 Jan 2018.
  */
 public class Driver {

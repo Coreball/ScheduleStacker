@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Scanner;
 
 /**
+ * Main ScheduleStacker class. Controls most things
  * Created by Changyuan Lin on 22 Jan 2018.
  */
 public class ScheduleStacker {

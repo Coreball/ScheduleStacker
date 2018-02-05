@@ -3,6 +3,7 @@ package coreball.schedulestacker;
 import javax.swing.*;
 
 /**
+ * GUI shell for ScheduleStacker
  * Created by Changyuan Lin on 22 Jan 2018.
  */
 public class ScheduleStackerGUI extends JFrame {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
+ * Contains the data structure for storing the courses
  * Created by Coreball on 22 Jan 2018.
  */
 public class Glue {
