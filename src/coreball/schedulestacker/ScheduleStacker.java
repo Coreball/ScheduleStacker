@@ -100,11 +100,15 @@ public class ScheduleStacker {
 			int type = Character.getNumericValue(line.charAt(0));
 			String firstBit = line.substring(0, line.indexOf("(A-"));
 			String secondBit = line.substring(line.lastIndexOf(')') + 1).trim(); // last index b/c (Teamed) is a course name
+			int semester = 0;
+			if(secondBit.charAt(0) == 'S') { // Set specific semester if isn't year-round
+				semester = Character.getNumericValue(secondBit.charAt(1));
+			}
 			secondBit = secondBit.substring(secondBit.indexOf(' ') + 1); // Advance to teacher's last name
 			String courseName = firstBit.substring(2, firstBit.lastIndexOf(" "));
 			String period = firstBit.substring(firstBit.lastIndexOf(' ') + 1);
 			String teacher = secondBit.substring(0, secondBit.indexOf(' ') - 1);
-			allClasses.type(type).getPeriodsFor(courseName).getTeachersFor(period).addTeacher(teacher);
+			allClasses.type(type).getSemestersFor(courseName).sem(semester).getTeachersFor(period).addTeacher(teacher);
 		} catch(Exception e) {
 			throw new IllegalArgumentException(); // TODO test this
 		}

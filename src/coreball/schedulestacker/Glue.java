@@ -14,7 +14,16 @@ public class Glue {
 	// It's actually ArrayList<HashMap<String, HashMap<String, ArrayList<String>>>> but that's hard to understand
 
 	/*
+	 * Types of Courses
+	 * Course Names
+	 * Semester?
+	 * Periods
+	 * Teachers
+	 */
+
+	/*
 	 * Intended use: type(1).getPeriodsFor("AP LANG").getTeachersFor("1");
+	 * Intended use: type(3).getSemestersFor("DS&A").sem(1).getTeachersFor("6");
 	 */
 
 	public Glue() {
@@ -36,9 +45,9 @@ public class Glue {
 	/**
 	 * Class representing the different school course of a type
 	 */
-	public class CourseList extends HashMap<String, PeriodList> {
+	public class CourseList extends HashMap<String, SemesterList> {
 
-		public PeriodList getPeriodsFor(String courseName) {
+		public SemesterList getSemestersFor(String courseName) {
 			if(!containsKey(courseName)) { // TODO Might remove later, not sure if necessary based on use
 				addClass(courseName);
 			}
@@ -46,9 +55,26 @@ public class Glue {
 		}
 
 		public void addClass(String courseName) {
-			put(courseName, new PeriodList()); // Warning kills the previous PeriodList if there was one
+			put(courseName, new SemesterList()); // Warning kills the previous SemesterList if there was one
 		}
 
+	}
+
+	/**
+	 * Represents the semesters a class is available as an ArrayList
+	 * 0 - Year-Round
+	 * 1 - Semester 1
+	 * 2 - Semester 2
+	 */
+	public class SemesterList extends ArrayList<PeriodList> {
+		public SemesterList() {
+			for(int i = 0; i < 3; i++) {
+				add(new PeriodList());
+			}
+		}
+		public PeriodList sem(int semester) {
+			return get(semester);
+		}
 	}
 
 	/**
