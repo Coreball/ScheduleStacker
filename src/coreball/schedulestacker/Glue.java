@@ -40,59 +40,87 @@ public class Glue {
 	/**
 	 * Class representing the different school course of a type
 	 */
-	public class CourseList extends HashMap<String, SemesterList> {
+	public class CourseList {
 
-		public SemesterList getSemestersFor(String courseName) {
-			if(!containsKey(courseName)) { // TODO Might remove later, not sure if necessary based on use
-				addClass(courseName);
-			}
-			return get(courseName);
+		private HashMap<String, SemesterList> semesterListHashMap;
+
+		private CourseList() {
+			semesterListHashMap = new HashMap<>();
 		}
 
-		public void addClass(String courseName) {
-			put(courseName, new SemesterList()); // Warning kills the previous SemesterList if there was one
+		public SemesterList getSemestersFor(String courseName) {
+			if(!semesterListHashMap.containsKey(courseName)) { // Might remove later, not sure if necessary based on use
+				addCourse(courseName);
+			}
+			return semesterListHashMap.get(courseName);
+		}
+
+		public void addCourse(String courseName) {
+			semesterListHashMap.put(courseName, new SemesterList()); // Warning kills the previous SemesterList if there was one
 		}
 
 	}
 
 	/**
-	 * Represents the semesters a class is available as an ArrayList
+	 * Represents the semesters a course is available
 	 * 0 - Year-Round
 	 * 1 - Semester 1
 	 * 2 - Semester 2
 	 */
-	public class SemesterList extends ArrayList<PeriodList> {
-		public SemesterList() {
+	public class SemesterList {
+
+		private ArrayList<PeriodList> periodLists;
+
+		private SemesterList() {
+			periodLists = new ArrayList<>();
 			for(int i = 0; i < 3; i++) {
-				add(new PeriodList());
+				periodLists.add(new PeriodList());
 			}
 		}
+
 		public PeriodList sem(int semester) {
-			return get(semester);
+			return periodLists.get(semester);
 		}
+
 	}
 
 	/**
 	 * Represents all periods a particular school course is offered
 	 */
-	public class PeriodList extends HashMap<String, TeacherList> {
-		public TeacherList getTeachersFor(String period) {
-			if(!containsKey(period)) {
-				put(period, new TeacherList());
-			}
-			return get(period);
+	public class PeriodList {
+
+		private HashMap<String, TeacherList> teacherListHashMap;
+
+		private PeriodList() {
+			teacherListHashMap = new HashMap<>();
 		}
+
+		public TeacherList getTeachersFor(String period) {
+			if(!teacherListHashMap.containsKey(period)) {
+				teacherListHashMap.put(period, new TeacherList());
+			}
+			return teacherListHashMap.get(period);
+		}
+
 	}
 
 	/**
 	 * Represents all teachers teaching a particular school course
 	 */
-	public class TeacherList extends ArrayList<String> {
+	public class TeacherList {
+
+		private ArrayList<String> teachers;
+
+		private TeacherList() {
+			teachers = new ArrayList<>();
+		}
+
 		public void addTeacher(String name) {
-			if(!contains(name)) { // Probably won't ever be false
-				add(name);
+			if(!teachers.contains(name)) { // Probably won't ever be false
+				teachers.add(name);
 			}
 		}
+
 	}
 
 }
