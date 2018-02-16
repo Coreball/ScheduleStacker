@@ -121,7 +121,7 @@ public class ScheduleStacker {
 		for(int i = 1; i <= 8; i++) {
 			DefaultListModel<String> currentList = typeListInternals.get(i - 1);
 			currentList.clear();
-			ArrayList<String> temporary = new ArrayList<>(allClasses.type(i).keySet());
+			ArrayList<String> temporary = new ArrayList<>(allClasses.type(i).getAllCourseNames());
 			Collections.sort(temporary); // just dump in temp array to sort. better solution?
 			for(String str : temporary) {
 				currentList.addElement(str);

@@ -2,6 +2,7 @@ package coreball.schedulestacker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Contains the data structure for storing the courses
@@ -57,6 +58,10 @@ public class Glue {
 
 		public void addCourse(String courseName) {
 			semesterListHashMap.put(courseName, new SemesterList()); // Warning kills the previous SemesterList if there was one
+		}
+
+		public Set<String> getAllCourseNames() {
+			return semesterListHashMap.keySet();
 		}
 
 	}
