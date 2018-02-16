@@ -36,6 +36,8 @@ public class ScheduleStackerGUI extends JFrame {
 	private JCheckBox checkPeriod6;
 	private JCheckBox checkPeriod7;
 	private JCheckBox checkPeriod8;
+	private JProgressBar progressBar1;
+	private JTable table1;
 	private JCheckBox[] checkPeriodArray;
 
 	public ScheduleStackerGUI() {

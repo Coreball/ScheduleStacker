@@ -11,7 +11,6 @@ public class Glue {
 
 	// Primary data structure for storing values
 	private ArrayList<CourseList> sticky;
-	// It's actually ArrayList<HashMap<String, HashMap<String, ArrayList<String>>>> but that's hard to understand
 
 	/*
 	 * Types of Courses
@@ -19,11 +18,7 @@ public class Glue {
 	 * Semester?
 	 * Periods
 	 * Teachers
-	 */
-
-	/*
-	 * Intended use: type(1).getPeriodsFor("AP LANG").getTeachersFor("1");
-	 * Intended use: type(3).getSemestersFor("DS&A").sem(1).getTeachersFor("6");
+	 * Intended use: type(3).getSemestersFor("DS&A").sem(1).getTeachersFor("6").addTeacher("Nguyen-Reed");
 	 */
 
 	public Glue() {
