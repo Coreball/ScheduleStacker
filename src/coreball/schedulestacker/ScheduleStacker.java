@@ -108,7 +108,7 @@ public class ScheduleStacker {
 			String courseName = firstBit.substring(2, firstBit.lastIndexOf(" "));
 			String period = firstBit.substring(firstBit.lastIndexOf(' ') + 1);
 			String teacher = secondBit.substring(0, secondBit.indexOf(' ') - 1);
-			allClasses.type(type).getSemestersFor(courseName).sem(semester).getTeachersFor(period).addTeacher(teacher);
+			allClasses.type(type).getCourse(courseName).sem(semester).getTeachersForPeriod(period).addTeacher(teacher);
 		} catch(Exception e) {
 			throw new IllegalArgumentException(); // TODO test this
 		}

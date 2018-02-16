@@ -6,7 +6,7 @@ import java.util.Set;
 
 /**
  * Contains the data structure for storing the courses
- * Created by Coreball on 22 Jan 2018.
+ * Created by Changyuan Lin on 22 Jan 2018.
  */
 public class Glue {
 
@@ -15,11 +15,13 @@ public class Glue {
 
 	/*
 	 * Types of Courses
-	 * Course Names
-	 * Semester?
+	 * All Course Names
+	 * Course
+	 * Semesters
 	 * Periods
 	 * Teachers
 	 * Intended use: type(3).getSemestersFor("DS&A").sem(1).getTeachersFor("6").addTeacher("Nguyen-Reed");
+	 * New: type(3).getCourse("DS&A").sem(1).getTeachersForPeriod("6").addTeacher("Nguyen-Reed");
 	 */
 
 	public Glue() {
@@ -43,44 +45,45 @@ public class Glue {
 	 */
 	public class CourseList {
 
-		private HashMap<String, SemesterList> semesterListHashMap;
+		private HashMap<String, Course> courseHashMap;
 
 		private CourseList() {
-			semesterListHashMap = new HashMap<>();
+			courseHashMap = new HashMap<>();
 		}
 
-		public SemesterList getSemestersFor(String courseName) {
-			if(!semesterListHashMap.containsKey(courseName)) { // Might remove later, not sure if necessary based on use
+		public Course getCourse(String courseName) {
+			if(!courseHashMap.containsKey(courseName)) { // Might remove later, not sure if necessary based on use
 				addCourse(courseName);
 			}
-			return semesterListHashMap.get(courseName);
+			return courseHashMap.get(courseName);
 		}
 
 		public void addCourse(String courseName) {
-			semesterListHashMap.put(courseName, new SemesterList()); // Warning kills the previous SemesterList if there was one
+			courseHashMap.put(courseName, new Course()); // Warning kills the previous SemesterList if there was one
 		}
 
 		public Set<String> getAllCourseNames() {
-			return semesterListHashMap.keySet();
+			return courseHashMap.keySet();
 		}
 
 	}
 
 	/**
-	 * Represents the semesters a course is available
-	 * 0 - Year-Round
-	 * 1 - Semester 1
-	 * 2 - Semester 2
+	 * Represents a course!
 	 */
-	public class SemesterList {
+	public class Course {
 
 		private ArrayList<PeriodList> periodLists;
 
-		private SemesterList() {
+		private Course() {
 			periodLists = new ArrayList<>();
 			for(int i = 0; i < 3; i++) {
 				periodLists.add(new PeriodList());
 			}
+		}
+
+		public boolean isYearlong() {
+			return !periodLists.get(0).isEmpty(); // If the yearlong list of periods is not empty then it's yearlong
 		}
 
 		public PeriodList sem(int semester) {
@@ -94,17 +97,21 @@ public class Glue {
 	 */
 	public class PeriodList {
 
-		private HashMap<String, TeacherList> teacherListHashMap;
+		private HashMap<String, TeacherList> teacherListHashMap; // STRING REPRESENTS THE PERIOD.
 
 		private PeriodList() {
 			teacherListHashMap = new HashMap<>();
 		}
 
-		public TeacherList getTeachersFor(String period) {
+		public TeacherList getTeachersForPeriod(String period) {
 			if(!teacherListHashMap.containsKey(period)) {
 				teacherListHashMap.put(period, new TeacherList());
 			}
 			return teacherListHashMap.get(period);
+		}
+
+		public boolean isEmpty() {
+			return teacherListHashMap.isEmpty();
 		}
 
 	}
@@ -126,6 +133,9 @@ public class Glue {
 			}
 		}
 
+		public ArrayList<String> getTeachers() {
+			return teachers;
+		}
 	}
 
 }
