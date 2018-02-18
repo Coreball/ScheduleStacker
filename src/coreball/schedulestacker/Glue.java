@@ -43,7 +43,7 @@ public class Glue {
 	/**
 	 * Class representing the different school course of a type
 	 */
-	public class CourseList {
+	public static class CourseList {
 
 		private HashMap<String, Course> courseHashMap;
 
@@ -71,7 +71,7 @@ public class Glue {
 	/**
 	 * Represents a course!
 	 */
-	public class Course {
+	public static class Course {
 
 		private ArrayList<PeriodList> periodLists;
 
@@ -95,7 +95,7 @@ public class Glue {
 	/**
 	 * Represents all periods a particular school course is offered
 	 */
-	public class PeriodList {
+	public static class PeriodList {
 
 		private HashMap<String, TeacherList> teacherListHashMap; // STRING REPRESENTS THE PERIOD.
 
@@ -119,7 +119,7 @@ public class Glue {
 	/**
 	 * Represents all teachers teaching a particular school course
 	 */
-	public class TeacherList {
+	public static class TeacherList {
 
 		private ArrayList<String> teachers;
 
