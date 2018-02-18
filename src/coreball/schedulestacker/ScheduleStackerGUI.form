@@ -303,9 +303,11 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="52c6b" class="javax.swing.JTable" binding="table1" default-binding="true">
+                  <component id="52c6b" class="javax.swing.JTable" binding="resultsTable">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <fillsViewportHeight value="true"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>

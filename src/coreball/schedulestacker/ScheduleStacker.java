@@ -15,6 +15,7 @@ import java.util.Scanner;
  */
 public class ScheduleStacker {
 
+	// Some things
 	private ScheduleStackerGUI gui;
 	private JFileChooser fileChooser;
 	private JButton findFileButton;
@@ -23,9 +24,13 @@ public class ScheduleStacker {
 	private JTextField filePathField;
 	private JList<String>[] typeListShells;
 	private ArrayList<DefaultListModel<String>> typeListInternals;
+	private JTable resultsTable;
 
+	// Computational data structures
 	private Glue allClasses;
+	private Tape doneSchedules;
 
+	// User input
 	private boolean[] offPeriodsDesired;
 
 	public ScheduleStacker() {
@@ -47,8 +52,11 @@ public class ScheduleStacker {
 		typeListShells = gui.getTypeListArray();
 		typeListInternals = new ArrayList<>();
 		initTypeListInternals();
+		resultsTable = gui.getResultsTable();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		allClasses = new Glue();
+		doneSchedules = new Tape();
+		initResultsTable();
 	}
 
 	private void initListeners() {
@@ -65,6 +73,19 @@ public class ScheduleStacker {
 			typeListInternals.add(new DefaultListModel<>());
 			typeListShells[i].setModel(typeListInternals.get(i));
 		}
+	}
+
+	/**
+	 * Set the model for the table and stuff
+	 */
+	private void initResultsTable() {
+		resultsTable.setModel(doneSchedules);
+		resultsTable.getTableHeader().setReorderingAllowed(false);
+		Tape.FinishedSchedule testSchedule = new Tape.FinishedSchedule();
+		// TODO delete this test code...
+		testSchedule.addYearlong("yearlong", "mr. always");
+		testSchedule.addSemesters("sem1", "mr. first", "sem2", "ms. second");
+		doneSchedules.addFinishedSchedule(testSchedule);
 	}
 
 	/**
