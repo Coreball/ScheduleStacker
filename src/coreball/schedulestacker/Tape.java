@@ -37,6 +37,11 @@ public class Tape extends AbstractTableModel {
 	}
 
 	@Override
+	public String getColumnName(int index) {
+		return "" + (index + 1); // 1, 2, 3, ... 8
+	}
+
+	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		return finishedSchedules.get(rowIndex).getCol(columnIndex);
 	}
@@ -68,61 +73,44 @@ public class Tape extends AbstractTableModel {
 			}
 		}
 
-		public void addYearlong(String name, String teacher) {
-			finishedCourses.add(new FinishedYearlong(name, teacher));
+		public void addYearlong(String courseName, String teacher) {
+			finishedCourses.add(new FinishedCourse(courseName, teacher));
 		}
 
-		public void addSemesters(String sem1, String teachA, String sem2, String teachB) {
-			finishedCourses.add(new FinishedSemester(sem1, teachA, sem2, teachB));
-		}
-
-	}
-
-	/**
-	 * Honestly idk what to do about this right now it isn't really good for being an interface
-	 */
-	public interface FinishedCourse {
-		// empty??!? TODO
-	}
-
-	/**
-	 * Finished yearlong course
-	 */
-	public static class FinishedYearlong implements FinishedCourse {
-
-		private String name;
-		private String teacher;
-
-		public FinishedYearlong(String name, String teacher) {
-			this.name = name;
-			this.teacher = teacher;
-		}
-
-		public String toString() {
-			return name + " - " + teacher;
+		public void addSemesters(String sem1, String teach1, String sem2, String teach2) {
+			finishedCourses.add(new FinishedCourse(sem1, teach1, sem2, teach2));
 		}
 
 	}
 
 	/**
-	 * Finished course that has two semesters inside
+	 * Finished Course stored in Tape
 	 */
-	public static class FinishedSemester implements FinishedCourse {
+	public static class FinishedCourse {
 
-		private String sem1;
+		private String courseA;
 		private String teachA;
-		private String sem2;
+		private String courseB;
 		private String teachB;
 
-		public FinishedSemester(String sem1, String teachA, String sem2, String teachB) {
-			this.sem1 = sem1;
-			this.teachA = teachA;
-			this.sem2 = sem2;
-			this.teachB = teachB;
+		public FinishedCourse(String courseName, String teacher) {
+			courseA = courseName;
+			teachA = teacher;
+		}
+
+		public FinishedCourse(String sem1, String teach1, String sem2, String teach2) {
+			courseA = sem1;
+			this.teachA = teach1;
+			courseB = sem2;
+			this.teachB = teach2;
 		}
 
 		public String toString() {
-			return sem1 + "/" + sem2 + " - " + teachA + "/" + teachB;
+			if(courseB == null) { // This is probably a better solution than the one with the useless interface
+				return courseA + " - " + teachA;
+			} else {
+				return courseA + "/" + courseB + " - " + teachA + "/" + teachB;
+			}
 		}
 
 	}
