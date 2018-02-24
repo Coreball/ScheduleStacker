@@ -22,6 +22,7 @@ public class ScheduleStacker {
 	private JButton loadFileButton;
 	private JButton processButton;
 	private JTextField filePathField;
+	private JProgressBar progressBar;
 	private JList<String>[] typeListShells;
 	private ArrayList<DefaultListModel<String>> typeListInternals;
 	private JTable resultsTable;
@@ -49,14 +50,15 @@ public class ScheduleStacker {
 		loadFileButton = gui.getLoadFileButton();
 		processButton = gui.getProcessButton();
 		filePathField = gui.getFilePathField();
+		progressBar = gui.getProgressBar();
 		typeListShells = gui.getTypeListArray();
 		typeListInternals = new ArrayList<>();
 		initTypeListInternals();
 		resultsTable = gui.getResultsTable();
-		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		allClasses = new Glue();
 		doneSchedules = new Tape();
 		initResultsTable();
+		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
 	private void initListeners() {
@@ -192,8 +194,10 @@ public class ScheduleStacker {
 	private class processButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			progressBar.setIndeterminate(true);
 			findOffPeriods();
 			// Process stuff
+			progressBar.setIndeterminate(false);
 		}
 	}
 
