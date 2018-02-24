@@ -1,5 +1,7 @@
 package coreball.schedulestacker;
 
+import coreball.schedulestacker.Glue.Course;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,12 +26,13 @@ public class ScheduleStacker {
 	private JTextField filePathField;
 	private JProgressBar progressBar;
 	private JList<String>[] typeListShells;
-	private ArrayList<DefaultListModel<String>> typeListInternals;
+	private ArrayList<DefaultListModel<String>> typeListInternals; // Hmm... do I really have to switch from Course to String and back?
 	private JTable resultsTable;
 
 	// Computational data structures
 	private Glue allClasses;
 	private Tape doneSchedules;
+	private ArrayList<Course> wantedCourses;
 
 	// User input
 	private boolean[] offPeriodsDesired;
@@ -43,6 +46,9 @@ public class ScheduleStacker {
 		gui.setVisible(true);
 	}
 
+	/**
+	 * Initialize components of the ScheduleStacker
+	 */
 	private void initComponents() {
 		gui = new ScheduleStackerGUI();
 		fileChooser = new JFileChooser(); // TODO Add filter for only .txt
@@ -54,13 +60,19 @@ public class ScheduleStacker {
 		typeListShells = gui.getTypeListArray();
 		typeListInternals = new ArrayList<>();
 		initTypeListInternals();
-		resultsTable = gui.getResultsTable();
+
 		allClasses = new Glue();
 		doneSchedules = new Tape();
+		wantedCourses = new ArrayList<>();
+
+		resultsTable = gui.getResultsTable();
 		initResultsTable();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
+	/**
+	 * Add the listeners for buttons used in ScheduleStacker
+	 */
 	private void initListeners() {
 		findFileButton.addActionListener(new findFileButtonListener());
 		loadFileButton.addActionListener(new loadFileButtonListener());
@@ -172,6 +184,18 @@ public class ScheduleStacker {
 		return offPeriodsDesired[period - 1];
 	}
 
+	/**
+	 * Find the courses the user has selected and add them to an array
+	 */
+	private void findWantedCourses() {
+		for(int type = 1; type <= 8; type++) {
+			JList<String> typeList = typeListShells[type - 1];
+			for(String course : typeList.getSelectedValuesList()) {
+				wantedCourses.add(allClasses.type(type).getCourse(course)); // Adds the actual Course
+			}
+		}
+	}
+
 	private class findFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -196,7 +220,9 @@ public class ScheduleStacker {
 		public void actionPerformed(ActionEvent e) {
 			progressBar.setIndeterminate(true);
 			findOffPeriods();
+			findWantedCourses();
 			// Process stuff
+			System.out.println(wantedCourses);
 			progressBar.setIndeterminate(false);
 		}
 	}
