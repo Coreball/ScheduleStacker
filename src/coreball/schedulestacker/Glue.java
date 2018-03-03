@@ -20,12 +20,11 @@ public class Glue {
 	 * Semesters
 	 * Periods
 	 * Teachers
-	 * Intended use: type(3).getSemestersFor("DS&A").sem(1).getTeachersFor("6").addTeacher("Nguyen-Reed");
-	 * New: type(3).getCourse("DS&A").sem(1).getTeachersForPeriod("6").addTeacher("Nguyen-Reed");
+	 * Use: type(3).getNamedCourse("DS&A").sem(1).getTeachersForPeriod("6").addTeacher("Nguyen-Reed");
 	 */
 
 	public Glue() {
-		sticky = new ArrayList<CourseList>();
+		sticky = new ArrayList<>();
 		for(int i = 0; i < 8; i++) {
 			sticky.add(new CourseList());
 		}
@@ -45,13 +44,13 @@ public class Glue {
 	 */
 	public static class CourseList {
 
-		private HashMap<String, Course> courseHashMap;
+		private HashMap<String, NamedCourse> courseHashMap;
 
 		private CourseList() {
 			courseHashMap = new HashMap<>();
 		}
 
-		public Course getCourse(String courseName) {
+		public NamedCourse getNamedCourse(String courseName) {
 			if(!courseHashMap.containsKey(courseName)) { // Might remove later, not sure if necessary based on use
 				addCourse(courseName);
 			}
@@ -59,7 +58,7 @@ public class Glue {
 		}
 
 		public void addCourse(String courseName) {
-			courseHashMap.put(courseName, new Course()); // Warning kills the previous SemesterList if there was one
+			courseHashMap.put(courseName, new NamedCourse(courseName)); // Warning kills the previous SemesterList if there was one
 		}
 
 		public Set<String> getAllCourseNames() {
@@ -69,17 +68,19 @@ public class Glue {
 	}
 
 	/**
-	 * Represents a course!
+	 * Represents a named course (not the specific instance of the course)
 	 */
-	public static class Course {
+	public static class NamedCourse {
 
 		private ArrayList<PeriodList> periodLists;
+		private String originalName;
 
-		private Course() {
+		private NamedCourse(String originalName) {
 			periodLists = new ArrayList<>();
 			for(int i = 0; i < 3; i++) {
 				periodLists.add(new PeriodList());
 			}
+			this.originalName = originalName;
 		}
 
 		public boolean isYearlong() {
@@ -88,6 +89,10 @@ public class Glue {
 
 		public PeriodList sem(int semester) {
 			return periodLists.get(semester);
+		}
+
+		public String toString() {
+			return originalName;
 		}
 
 	}
@@ -121,21 +126,30 @@ public class Glue {
 	 */
 	public static class TeacherList {
 
-		private ArrayList<String> teachers;
+		private ArrayList<SpecificCourse> specificCourses;
 
 		private TeacherList() {
-			teachers = new ArrayList<>();
+			specificCourses = new ArrayList<>();
 		}
 
-		public void addTeacher(String name) {
-			if(!teachers.contains(name)) { // Probably won't ever be false
-				teachers.add(name);
+		/**
+		 * Adds specific course with specific teacher if needed
+		 * @param courseName name of course
+		 * @param teacher
+		 */
+		public void addTeacher(String courseName, int semester, String period, String teacher) {
+			for(SpecificCourse specificCourse : specificCourses) {
+				if(specificCourse.getTeacher().equals(teacher)) {
+					return;
+				}
 			}
+			specificCourses.add(new SpecificCourse(courseName, semester, period, teacher));
 		}
 
-		public ArrayList<String> getTeachers() {
-			return teachers;
+		public ArrayList<SpecificCourse> getSpecificCourses() {
+			return specificCourses;
 		}
+
 	}
 
 }

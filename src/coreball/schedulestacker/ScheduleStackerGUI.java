@@ -1,5 +1,7 @@
 package coreball.schedulestacker;
 
+import coreball.schedulestacker.Glue.NamedCourse;
+
 import javax.swing.*;
 
 /**
@@ -19,15 +21,15 @@ public class ScheduleStackerGUI extends JFrame {
 	private JButton loadFileButton;
 	private JTextField filePathField;
 	private JButton processButton;
-	private JList<String> type1;
-	private JList<String> type2;
-	private JList<String> type3;
-	private JList<String> type4;
-	private JList<String> type5;
-	private JList<String> type6;
-	private JList<String> type7;
-	private JList<String> type8;
-	private JList<String>[] typeListArray;
+	private JList<NamedCourse> type1;
+	private JList<NamedCourse> type2;
+	private JList<NamedCourse> type3;
+	private JList<NamedCourse> type4;
+	private JList<NamedCourse> type5;
+	private JList<NamedCourse> type6;
+	private JList<NamedCourse> type7;
+	private JList<NamedCourse> type8;
+	private JList<NamedCourse>[] typeListArray;
 	private JCheckBox checkPeriod1;
 	private JCheckBox checkPeriod2;
 	private JCheckBox checkPeriod3;
@@ -102,7 +104,7 @@ public class ScheduleStackerGUI extends JFrame {
 		return checkPeriodArray;
 	}
 
-	public JList<String>[] getTypeListArray() {
+	public JList<NamedCourse>[] getTypeListArray() {
 		return typeListArray;
 	}
 

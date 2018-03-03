@@ -45,7 +45,7 @@
                 <properties>
                   <horizontalAlignment value="10"/>
                   <horizontalTextPosition value="11"/>
-                  <text value="Development Version 23 Feb 2018"/>
+                  <text value="Development Version 01 Mar 2018"/>
                 </properties>
               </component>
             </children>
@@ -110,7 +110,9 @@
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="6b546" class="javax.swing.JList" binding="type1">
@@ -123,7 +125,9 @@
                     <constraints>
                       <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="87238" class="javax.swing.JList" binding="type2">
@@ -136,7 +140,9 @@
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="2a98e" class="javax.swing.JList" binding="type3">
@@ -149,7 +155,9 @@
                     <constraints>
                       <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="36b40" class="javax.swing.JList" binding="type4">
@@ -162,7 +170,9 @@
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="c5b83" class="javax.swing.JList" binding="type5">
@@ -175,7 +185,9 @@
                     <constraints>
                       <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="eaefc" class="javax.swing.JList" binding="type6">
@@ -188,7 +200,9 @@
                     <constraints>
                       <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="53e33" class="javax.swing.JList" binding="type7">
@@ -201,7 +215,9 @@
                     <constraints>
                       <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                     </constraints>
-                    <properties/>
+                    <properties>
+                      <verticalScrollBarPolicy value="22"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="53bb9" class="javax.swing.JList" binding="type8">

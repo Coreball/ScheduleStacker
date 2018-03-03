@@ -1,6 +1,6 @@
 package coreball.schedulestacker;
 
-import coreball.schedulestacker.Glue.Course;
+import coreball.schedulestacker.Glue.NamedCourse;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -25,14 +25,14 @@ public class ScheduleStacker {
 	private JButton processButton;
 	private JTextField filePathField;
 	private JProgressBar progressBar;
-	private JList<String>[] typeListShells;
-	private ArrayList<DefaultListModel<String>> typeListInternals; // Hmm... do I really have to switch from Course to String and back?
+	private JList<NamedCourse>[] typeListShells;
+	private ArrayList<DefaultListModel<NamedCourse>> typeListInternals; // Hmm... do I really have to switch from Course to String and back?
 	private JTable resultsTable;
 
 	// Computational data structures
 	private Glue allClasses;
 	private Tape doneSchedules;
-	private ArrayList<Course> wantedCourses;
+	private ArrayList<NamedCourse> wantedCourses;
 
 	// User input
 	private boolean[] offPeriodsDesired;
@@ -143,7 +143,7 @@ public class ScheduleStacker {
 			String courseName = firstBit.substring(2, firstBit.lastIndexOf(" "));
 			String period = firstBit.substring(firstBit.lastIndexOf(' ') + 1);
 			String teacher = secondBit.substring(0, secondBit.indexOf(' ') - 1);
-			allClasses.type(type).getCourse(courseName).sem(semester).getTeachersForPeriod(period).addTeacher(teacher);
+			allClasses.type(type).getNamedCourse(courseName).sem(semester).getTeachersForPeriod(period).addTeacher(courseName, semester, period, teacher);
 		} catch(Exception e) {
 			throw new IllegalArgumentException(); // TODO test this
 		}
@@ -154,12 +154,12 @@ public class ScheduleStacker {
 	 */
 	private void updateTypeLists() {
 		for(int i = 1; i <= 8; i++) {
-			DefaultListModel<String> currentList = typeListInternals.get(i - 1);
+			DefaultListModel<NamedCourse> currentList = typeListInternals.get(i - 1);
 			currentList.clear();
 			ArrayList<String> temporary = new ArrayList<>(allClasses.type(i).getAllCourseNames());
 			Collections.sort(temporary); // just dump in temp array to sort. better solution?
 			for(String str : temporary) {
-				currentList.addElement(str);
+				currentList.addElement(allClasses.type(i).getNamedCourse(str));
 			}
 		}
 	}
@@ -188,11 +188,10 @@ public class ScheduleStacker {
 	 * Find the courses the user has selected and add them to an array
 	 */
 	private void findWantedCourses() {
+		wantedCourses.clear();
 		for(int type = 1; type <= 8; type++) {
-			JList<String> typeList = typeListShells[type - 1];
-			for(String course : typeList.getSelectedValuesList()) {
-				wantedCourses.add(allClasses.type(type).getCourse(course)); // Adds the actual Course
-			}
+			JList<NamedCourse> typeList = typeListShells[type - 1];
+			wantedCourses.addAll(typeList.getSelectedValuesList()); // I simplified this!
 		}
 	}
 
