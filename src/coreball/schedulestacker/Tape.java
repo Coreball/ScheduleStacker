@@ -59,58 +59,45 @@ public class Tape extends AbstractTableModel {
 	 */
 	public static class FinishedSchedule {
 
-		private ArrayList<FinishedCourse> finishedCourses;
+		private ArrayList<ArrayList<SpecificCourse>> finishedCourses; // List(Periods) of List(1 or 2 SpecificCourses)
 
 		public FinishedSchedule() {
 			finishedCourses = new ArrayList<>();
+			for(int i = 1; i <=8; i++) {
+				finishedCourses.add(new ArrayList<>());
+			}
 		}
 
-		private FinishedCourse getCol(int col) {
+		private String getCol(int col) {
 			if(col >= finishedCourses.size()) { // TODO probably not needed
 				return null;
 			} else {
-				return finishedCourses.get(col);
+				if(finishedCourses.get(col).size() == 1) {
+					SpecificCourse yearlong = finishedCourses.get(col).get(0);
+					return yearlong.getCourseName() + " - " + yearlong.getTeacher();
+				} else if(finishedCourses.get(col).size() == 2) {
+					SpecificCourse s1 = finishedCourses.get(col).get(0);
+					SpecificCourse s2 = finishedCourses.get(col).get(1);
+					if(s1 != null && s2 != null) {
+						return s1.getCourseName() + "/" + s2.getCourseName() + "; " + s1.getTeacher() + "/" + s2.getTeacher();
+					} else if(s1 != null) {
+						return s1.getCourseName() + "/" + "-" + "; " + s1.getTeacher() + "/" + "-";
+					} else {
+						return "-" + "/" + s2.getCourseName() + "; " + "-" + "/" + s2.getTeacher();
+					} // TODO evaluate best way to convey that one semester has no classes
+				} else {
+					return "-";
+				}
 			}
 		}
 
-		public void addYearlong(String courseName, String teacher) {
-			finishedCourses.add(new FinishedCourse(courseName, teacher));
+		public void addYearlong(int period, SpecificCourse course) { // For multiple periods call this twice
+			finishedCourses.get(period).add(course);
 		}
 
-		public void addSemesters(String sem1, String teach1, String sem2, String teach2) {
-			finishedCourses.add(new FinishedCourse(sem1, teach1, sem2, teach2));
-		}
-
-	}
-
-	/**
-	 * Finished Course stored in Tape
-	 */
-	public static class FinishedCourse {
-
-		private String courseA;
-		private String teachA;
-		private String courseB;
-		private String teachB;
-
-		public FinishedCourse(String courseName, String teacher) {
-			courseA = courseName;
-			teachA = teacher;
-		}
-
-		public FinishedCourse(String sem1, String teach1, String sem2, String teach2) {
-			courseA = sem1;
-			this.teachA = teach1;
-			courseB = sem2;
-			this.teachB = teach2;
-		}
-
-		public String toString() {
-			if(courseB == null) { // This is probably a better solution than the one with the useless interface
-				return courseA + " - " + teachA;
-			} else {
-				return courseA + "/" + courseB + " - " + teachA + "/" + teachB;
-			}
+		public void addSemesters(int period, SpecificCourse s1, SpecificCourse s2) {
+			finishedCourses.get(period).add(s1);
+			finishedCourses.get(period).add(s2);
 		}
 
 	}

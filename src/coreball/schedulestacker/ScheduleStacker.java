@@ -26,7 +26,7 @@ public class ScheduleStacker {
 	private JTextField filePathField;
 	private JProgressBar progressBar;
 	private JList<NamedCourse>[] typeListShells;
-	private ArrayList<DefaultListModel<NamedCourse>> typeListInternals; // Hmm... do I really have to switch from Course to String and back?
+	private ArrayList<DefaultListModel<NamedCourse>> typeListInternals;
 	private JTable resultsTable;
 
 	// Computational data structures
@@ -97,8 +97,11 @@ public class ScheduleStacker {
 		resultsTable.getTableHeader().setReorderingAllowed(false);
 		Tape.FinishedSchedule testSchedule = new Tape.FinishedSchedule();
 		// TODO delete this test code...
-		testSchedule.addYearlong("yearlong", "mr. always");
-		testSchedule.addSemesters("sem1", "mr. first", "sem2", "ms. second");
+		testSchedule.addYearlong(1, new SpecificCourse("yearboy", 0, "1", "mr always"));
+		testSchedule.addSemesters(3, new SpecificCourse("semestergirl", 1, "3", "ms uno"),
+				new SpecificCourse("semgurl", 2, "3", "ms dos"));
+		testSchedule.addSemesters(6, new SpecificCourse("semestergirl", 1, "6", "ms uno"),
+				null);
 		doneSchedules.addFinishedSchedule(testSchedule);
 	}
 

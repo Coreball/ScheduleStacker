@@ -22,8 +22,8 @@ public class SpecificCourse {
 		return teacher;
 	}
 
-	public String toString() {
-		return "NOT IMPLEMENTED YET";
+	public String getCourseName() {
+		return courseName;
 	}
 
 }
