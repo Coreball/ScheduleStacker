@@ -106,7 +106,7 @@ public class Tape extends AbstractTableModel {
 		public boolean alreadyContains(NamedCourse namedCourse) {
 			for(ArrayList<SpecificCourse> periods : finishedCourses) {
 				for(SpecificCourse course : periods) {
-					if(course.getCourseName().equals(namedCourse.toString())) {
+					if(course != null && course.getCourseName().equals(namedCourse.toString())) {
 						return true;
 					}
 				}
