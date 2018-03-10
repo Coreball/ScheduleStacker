@@ -115,12 +115,12 @@ public class Tape extends AbstractTableModel {
 		}
 
 		public void addYearlong(int period, SpecificCourse course) { // For multiple periods call this twice
-			finishedCourses.get(period).add(course);
+			finishedCourses.get(period - 1).add(course);
 		}
 
 		public void addSemesters(int period, SpecificCourse s1, SpecificCourse s2) {
-			finishedCourses.get(period).add(s1);
-			finishedCourses.get(period).add(s2);
+			finishedCourses.get(period - 1).add(s1);
+			finishedCourses.get(period - 1).add(s2);
 		}
 
 	}

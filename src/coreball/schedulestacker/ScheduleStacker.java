@@ -217,54 +217,94 @@ public class ScheduleStacker {
 		if(period > 8) {
 			// TODO check if all conditions satisfied? add to results.
 			doneSchedules.addFinishedSchedule(prevSchedule);
+			return; // SKIP FOR NOW
 		}
 
 		// If we want this off period off then go directly to next period
 		if(wantsOffPeriod(period)) {
 			computeForPeriod(new FinishedSchedule(prevSchedule), period + 1);
+			return; // Don't do the other things below
 		}
 
 		// TODO possibly have this as a wildcarded off period (off not required by user but user needs an off)
+		computeForPeriod(new FinishedSchedule(prevSchedule), period + 1); // Does do the other things below
 
-		// Else loop through courses we want
-		else {
-			for(NamedCourse namedCourse : wantedCourses) {
+		// TODO worry about empty first semester
+		solveSecondSemester(prevSchedule, period, null);
 
-				// If we don't have this namedCourse already
-				if(!prevSchedule.alreadyContains(namedCourse)) {
+		// Loop through courses we want
+		for(NamedCourse namedCourse : wantedCourses) {
 
-					// If it's a yearlong course
-					if(namedCourse.isYearlong()) {
-						// Check if it's 1 period long and available this period (specific courses available > 0)
-						if(namedCourse.sem(0).getTeachersForPeriod("" + period).getSpecificCourses().size() > 0) {
-							// Go through all teachers' courses
-							for(SpecificCourse specificCourse : namedCourse.sem(0).getTeachersForPeriod("" + period).getSpecificCourses()) {
-								FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
-								workingSchedule.addYearlong(period, specificCourse);
-								computeForPeriod(workingSchedule, period + 1);
-							}
-						}
-						// Else if it's a multiperiod course (hack for getting correct String for hashmap)
-						else if(namedCourse.sem(0).getTeachersForPeriod(period + "-" + (period + 1)).getSpecificCourses().size() > 0
-								&& !wantsOffPeriod(period + 1)) { // AND doesn't NEED off period that double period extends into
-							// Go through all teachers' courses
-							for(SpecificCourse specificCourse : namedCourse.sem(0).getTeachersForPeriod(period + "-" + (period + 1)).getSpecificCourses()) {
-								FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
-								workingSchedule.addYearlong(period, specificCourse);
-								workingSchedule.addYearlong(period + 1, specificCourse); // SHOULDN'T ERROR since courses can be 7-8 (no more) at max
-								computeForPeriod(workingSchedule, period + 2); // We check if period > 8 so this is ok, I think
-							}
+			// If we don't have this namedCourse already
+			if(!prevSchedule.alreadyContains(namedCourse)) {
+
+				// If it's a yearlong course
+				if(namedCourse.isYearlong()) {
+					// Check if it's 1 period long and available this period (specific courses available > 0)
+					if(namedCourse.sem(0).getTeachersForPeriod("" + period).getSpecificCourses().size() > 0) {
+						// Go through all teachers' courses
+						for(SpecificCourse specificCourse : namedCourse.sem(0).getTeachersForPeriod("" + period).getSpecificCourses()) {
+							FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
+							workingSchedule.addYearlong(period, specificCourse);
+							computeForPeriod(workingSchedule, period + 1);
 						}
 					}
-					// If it's a semester course
-					else {
-						// deal with semesters BEWARE OF workingSchedule!!!
+					// Else if it's a multiperiod course (hack for getting correct String for hashmap)
+					else if(namedCourse.sem(0).getTeachersForPeriod(period + "-" + (period + 1)).getSpecificCourses().size() > 0
+							&& !wantsOffPeriod(period + 1)) { // AND doesn't NEED off period that double period extends into
+						// Go through all teachers' courses
+						for(SpecificCourse specificCourse : namedCourse.sem(0).getTeachersForPeriod(period + "-" + (period + 1)).getSpecificCourses()) {
+							FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
+							workingSchedule.addYearlong(period, specificCourse);
+							workingSchedule.addYearlong(period + 1, specificCourse); // SHOULDN'T ERROR since courses can be 7-8 (no more) at max
+							computeForPeriod(workingSchedule, period + 2); // We check if period > 8 so this is ok, I think
+						}
 					}
 				}
 
+				// If it's a semester course
+				else {
+					// Test if it's available 1st semester this period (specific courses available > 0)
+					if(namedCourse.sem(1).getTeachersForPeriod("" + period).getSpecificCourses().size() > 0) {
+						// Go through all teachers' courses
+						for(SpecificCourse s1 : namedCourse.sem(1).getTeachersForPeriod("" + period).getSpecificCourses()) {
+							// Call to figure out second semester
+							solveSecondSemester(prevSchedule, period, s1); // deals with recursion calls too
+						}
+					}
+				}
 			}
 
-			// TODO worry about empty first semester
+		}
+
+	}
+
+	/**
+	 * Solve for the second semester, take in the first.
+	 * @param prevSchedule current schedule worked on
+	 * @param period wat period??
+	 * @param s1 the first course we've already chosen
+	 */
+	private void solveSecondSemester(FinishedSchedule prevSchedule, int period, SpecificCourse s1) {
+		// Embrace the possibility that this could be null ONLY IF s1 != null
+		if(s1 != null) {
+			FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
+			workingSchedule.addSemesters(period, s1, null);
+			computeForPeriod(workingSchedule, period + 1);
+		}
+
+		// Loop through courses
+		for(NamedCourse namedCourse : wantedCourses) {
+			// If we don't already have it AND it's available s2 AND it's not s1
+			if(!prevSchedule.alreadyContains(namedCourse) && namedCourse.sem(2).getTeachersForPeriod("" + period).getSpecificCourses().size() > 0
+					&& (s1 == null || /* in case s1 is null*/ !s1.getCourseName().equals(namedCourse.toString()))) {
+				// Go through all teachers' second semester courses
+				for(SpecificCourse s2 : namedCourse.sem(2).getTeachersForPeriod("" + period).getSpecificCourses()) {
+					FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
+					workingSchedule.addSemesters(period, s1, s2);
+					computeForPeriod(workingSchedule, period + 1);
+				}
+			}
 		}
 	}
 
