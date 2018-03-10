@@ -1,6 +1,7 @@
 package coreball.schedulestacker;
 
 import coreball.schedulestacker.Glue.NamedCourse;
+import coreball.schedulestacker.Tape.FinishedSchedule;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -198,6 +199,75 @@ public class ScheduleStacker {
 		}
 	}
 
+	/**
+	 * Compute the schedules and place them in doneSchedules
+	 */
+	private void computeSchedules() {
+		computeForPeriod(new FinishedSchedule(), 1); // Test
+	}
+
+	/**
+	 * Solve for the next period RECURSIVELY
+	 * @param prevSchedule current schedule worked on and being added to
+	 * @param period period we're looking to put a specific course in
+	 */
+	private void computeForPeriod(FinishedSchedule prevSchedule, int period) {
+
+		// If schedule is done add
+		if(period > 8) {
+			// TODO check if all conditions satisfied? add to results.
+			doneSchedules.addFinishedSchedule(prevSchedule);
+		}
+
+		// If we want this off period off then go directly to next period
+		if(wantsOffPeriod(period)) {
+			computeForPeriod(new FinishedSchedule(prevSchedule), period + 1);
+		}
+
+		// TODO possibly have this as a wildcarded off period (off not required by user but user needs an off)
+
+		// Else loop through courses we want
+		else {
+			for(NamedCourse namedCourse : wantedCourses) {
+
+				// If we don't have this namedCourse already
+				if(!prevSchedule.alreadyContains(namedCourse)) {
+
+					// If it's a yearlong course
+					if(namedCourse.isYearlong()) {
+						// Check if it's 1 period long and available this period (specific courses available > 0)
+						if(namedCourse.sem(0).getTeachersForPeriod("" + period).getSpecificCourses().size() > 0) {
+							// Go through all teachers' courses
+							for(SpecificCourse specificCourse : namedCourse.sem(0).getTeachersForPeriod("" + period).getSpecificCourses()) {
+								FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
+								workingSchedule.addYearlong(period, specificCourse);
+								computeForPeriod(workingSchedule, period + 1);
+							}
+						}
+						// Else if it's a multiperiod course (hack for getting correct String for hashmap)
+						else if(namedCourse.sem(0).getTeachersForPeriod(period + "-" + (period + 1)).getSpecificCourses().size() > 0
+								&& !wantsOffPeriod(period + 1)) { // AND doesn't NEED off period that double period extends into
+							// Go through all teachers' courses
+							for(SpecificCourse specificCourse : namedCourse.sem(0).getTeachersForPeriod(period + "-" + (period + 1)).getSpecificCourses()) {
+								FinishedSchedule workingSchedule = new FinishedSchedule(prevSchedule);
+								workingSchedule.addYearlong(period, specificCourse);
+								workingSchedule.addYearlong(period + 1, specificCourse); // SHOULDN'T ERROR since courses can be 7-8 (no more) at max
+								computeForPeriod(workingSchedule, period + 2); // We check if period > 8 so this is ok, I think
+							}
+						}
+					}
+					// If it's a semester course
+					else {
+						// deal with semesters BEWARE OF workingSchedule!!!
+					}
+				}
+
+			}
+
+			// TODO worry about empty first semester
+		}
+	}
+
 	private class findFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -220,11 +290,12 @@ public class ScheduleStacker {
 	private class processButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			progressBar.setIndeterminate(true);
+			progressBar.setIndeterminate(true); // TODO REMOVE IF DOESN'T WORK
 			findOffPeriods();
 			findWantedCourses();
 			// Process stuff
 			System.out.println(wantedCourses);
+			computeSchedules();
 			progressBar.setIndeterminate(false);
 		}
 	}

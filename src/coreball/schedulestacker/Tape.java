@@ -1,5 +1,7 @@
 package coreball.schedulestacker;
 
+import coreball.schedulestacker.Glue.NamedCourse;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
@@ -63,8 +65,18 @@ public class Tape extends AbstractTableModel {
 
 		public FinishedSchedule() {
 			finishedCourses = new ArrayList<>();
-			for(int i = 1; i <=8; i++) {
+			for(int i = 1; i <= 8; i++) {
 				finishedCourses.add(new ArrayList<>());
+			}
+		}
+
+		public FinishedSchedule(FinishedSchedule copy) { // TODO NOT SURE IF COPY CONSTRUCTOR NECESSARY
+			finishedCourses = new ArrayList<>();
+			for(int i = 1; i <= 8; i++) {
+				finishedCourses.add(new ArrayList<>());
+				for(SpecificCourse s : copy.finishedCourses.get(i - 1)) {
+					finishedCourses.get(i - 1).add(s);
+				}
 			}
 		}
 
@@ -89,6 +101,17 @@ public class Tape extends AbstractTableModel {
 					return "-";
 				}
 			}
+		}
+
+		public boolean alreadyContains(NamedCourse namedCourse) {
+			for(ArrayList<SpecificCourse> periods : finishedCourses) {
+				for(SpecificCourse course : periods) {
+					if(course.getCourseName().equals(namedCourse.toString())) {
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 
 		public void addYearlong(int period, SpecificCourse course) { // For multiple periods call this twice
