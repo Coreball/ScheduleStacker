@@ -55,6 +55,9 @@ public class ScheduleStackerGUI extends JFrame {
 		makeTypeListArray(); // FORGOT THIS
 	}
 
+	/**
+	 * Prepare array of period check boxes
+	 */
 	private void makeCheckPeriodArray() {
 		checkPeriodArray = new JCheckBox[8];
 		checkPeriodArray[0] = checkPeriod1;
@@ -67,6 +70,9 @@ public class ScheduleStackerGUI extends JFrame {
 		checkPeriodArray[7] = checkPeriod8;
 	}
 
+	/**
+	 * Prepare array of the type lists where selectable courses are sorted
+	 */
 	private void makeTypeListArray() {
 		typeListArray = new JList[8];
 		typeListArray[0] = type1;

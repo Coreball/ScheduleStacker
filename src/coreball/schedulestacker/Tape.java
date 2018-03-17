@@ -77,7 +77,7 @@ public class Tape extends AbstractTableModel {
 			}
 		}
 
-		public FinishedSchedule(FinishedSchedule copy) { // TODO NOT SURE IF COPY CONSTRUCTOR NECESSARY
+		public FinishedSchedule(FinishedSchedule copy) {
 			finishedCourses = new ArrayList<>();
 			for(int i = 1; i <= 8; i++) {
 				finishedCourses.add(new ArrayList<>());
@@ -88,7 +88,7 @@ public class Tape extends AbstractTableModel {
 		}
 
 		private String getCol(int col) {
-			if(col >= finishedCourses.size()) { // TODO probably not needed
+			if(col >= finishedCourses.size()) { // Probably not needed but safeguards are cool
 				return null;
 			} else {
 				if(finishedCourses.get(col).size() == 1) {

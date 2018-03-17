@@ -17,12 +17,14 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="c60d4" binding="homePanel" layout-manager="GridLayoutManager" row-count="3" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="c60d4" binding="homePanel" layout-manager="GridLayoutManager" row-count="6" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="About"/>
             </constraints>
-            <properties/>
+            <properties>
+              <font/>
+            </properties>
             <border type="none"/>
             <children>
               <component id="e93ba" class="javax.swing.JLabel" binding="homeTitle">
@@ -30,22 +32,47 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
+                  <font size="24"/>
                   <text value="Schedule Stacker"/>
                 </properties>
               </component>
               <vspacer id="afecf">
                 <constraints>
-                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
                 </constraints>
               </vspacer>
               <component id="30639" class="javax.swing.JLabel" binding="homeDesc">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <horizontalAlignment value="10"/>
                   <horizontalTextPosition value="11"/>
-                  <text value="Development Version 16 Mar 2018"/>
+                  <text value="v1.0.0 - 16 Mar 2018"/>
+                </properties>
+              </component>
+              <component id="fc20d" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="by Changyuan Lin"/>
+                </properties>
+              </component>
+              <component id="fa0d2" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Initial release"/>
+                </properties>
+              </component>
+              <component id="7d9a5" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="https://coreball.github.io/ScheduleStacker/"/>
                 </properties>
               </component>
             </children>

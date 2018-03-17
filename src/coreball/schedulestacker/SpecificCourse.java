@@ -7,7 +7,7 @@ package coreball.schedulestacker;
 public class SpecificCourse {
 
 	private String courseName;
-	private int semester;
+	private int semester; // I don't actually use these but whatever
 	private String period;
 	private String teacher;
 

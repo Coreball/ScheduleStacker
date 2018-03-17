@@ -135,7 +135,7 @@ public class Glue {
 		/**
 		 * Adds specific course with specific teacher if needed
 		 * @param courseName name of course
-		 * @param teacher
+		 * @param teacher the teacher
 		 */
 		public void addTeacher(String courseName, int semester, String period, String teacher) {
 			for(SpecificCourse specificCourse : specificCourses) {
