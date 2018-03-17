@@ -4,6 +4,7 @@ import coreball.schedulestacker.Glue.NamedCourse;
 import coreball.schedulestacker.Tape.FinishedSchedule;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -25,7 +26,6 @@ public class ScheduleStacker {
 	private JButton loadFileButton;
 	private JButton processButton;
 	private JTextField filePathField;
-	private JProgressBar progressBar;
 	private JList<NamedCourse>[] typeListShells;
 	private ArrayList<DefaultListModel<NamedCourse>> typeListInternals;
 	private JTable resultsTable;
@@ -57,7 +57,6 @@ public class ScheduleStacker {
 		loadFileButton = gui.getLoadFileButton();
 		processButton = gui.getProcessButton();
 		filePathField = gui.getFilePathField();
-		progressBar = gui.getProgressBar();
 		typeListShells = gui.getTypeListArray();
 		typeListInternals = new ArrayList<>();
 		initTypeListInternals();
@@ -328,14 +327,20 @@ public class ScheduleStacker {
 	private class processButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			progressBar.setIndeterminate(true); // TODO REMOVE IF DOESN'T WORK
+			gui.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			findOffPeriods();
 			findWantedCourses();
-			// Process stuff
 			System.out.println(wantedCourses);
-			computeSchedules();
-			doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
-			progressBar.setIndeterminate(false);
+			System.out.println(wantedCourses.size());
+			if(wantedCourses.size() > 0) {
+				// Process stuff
+				computeSchedules();
+				doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
+				JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
+			} else {
+				JOptionPane.showMessageDialog(gui, "No courses selected!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+			gui.setCursor(Cursor.getDefaultCursor());
 		}
 	}
 

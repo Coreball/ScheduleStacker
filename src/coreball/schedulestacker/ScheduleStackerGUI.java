@@ -38,7 +38,6 @@ public class ScheduleStackerGUI extends JFrame {
 	private JCheckBox checkPeriod6;
 	private JCheckBox checkPeriod7;
 	private JCheckBox checkPeriod8;
-	private JProgressBar progressBar;
 	private JTable resultsTable;
 	private JCheckBox[] checkPeriodArray;
 
@@ -94,10 +93,6 @@ public class ScheduleStackerGUI extends JFrame {
 
 	public JTextField getFilePathField() {
 		return filePathField;
-	}
-
-	public JProgressBar getProgressBar() {
-		return progressBar;
 	}
 
 	public JCheckBox[] getCheckPeriodArray() {
