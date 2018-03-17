@@ -57,6 +57,13 @@ public class Tape extends AbstractTableModel {
 	}
 
 	/**
+	 * Delete everything
+	 */
+	public void reset() {
+		finishedSchedules = new ArrayList<>();
+	}
+
+	/**
 	 * Finished schedule of 8 periods
 	 */
 	public static class FinishedSchedule {

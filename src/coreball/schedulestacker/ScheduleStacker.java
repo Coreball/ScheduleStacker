@@ -96,14 +96,6 @@ public class ScheduleStacker {
 	private void initResultsTable() {
 		resultsTable.setModel(doneSchedules);
 		resultsTable.getTableHeader().setReorderingAllowed(false);
-		Tape.FinishedSchedule testSchedule = new Tape.FinishedSchedule();
-		// TODO delete this test code...
-		testSchedule.addYearlong(1, new SpecificCourse("yearboy", 0, "1", "mr always"));
-		testSchedule.addSemesters(3, new SpecificCourse("semestergirl", 1, "3", "ms uno"),
-				new SpecificCourse("semgurl", 2, "3", "ms dos"));
-		testSchedule.addSemesters(6, new SpecificCourse("semestergirl", 1, "6", "ms uno"),
-				null);
-		doneSchedules.addFinishedSchedule(testSchedule);
 	}
 
 	/**
@@ -203,7 +195,8 @@ public class ScheduleStacker {
 	 * Compute the schedules and place them in doneSchedules
 	 */
 	private void computeSchedules() {
-		computeForPeriod(new FinishedSchedule(), 1); // Test
+		doneSchedules.reset(); // Clean up table
+		computeForPeriod(new FinishedSchedule(), 1); // Ignite the fire.
 	}
 
 	/**
@@ -215,9 +208,14 @@ public class ScheduleStacker {
 
 		// If schedule is done add
 		if(period > 8) {
-			// TODO check if all conditions satisfied? add to results.
+			// Check if all conditions satisfied? add to results.
+			for(NamedCourse namedCourse : wantedCourses) {
+				if(!prevSchedule.alreadyContains(namedCourse)) {
+					return;
+				}
+			}
 			doneSchedules.addFinishedSchedule(prevSchedule);
-			return; // SKIP FOR NOW
+			return; // Do not do more computation for this specific schedule
 		}
 
 		// If we want this off period off then go directly to next period
@@ -226,10 +224,10 @@ public class ScheduleStacker {
 			return; // Don't do the other things below
 		}
 
-		// TODO possibly have this as a wildcarded off period (off not required by user but user needs an off)
+		// Have this as a wildcard off period (off not required by user but user needs an off)
 		computeForPeriod(new FinishedSchedule(prevSchedule), period + 1); // Does do the other things below
 
-		// TODO worry about empty first semester
+		// Worry about empty first semester ie if first semester could be an off period but not second
 		solveSecondSemester(prevSchedule, period, null);
 
 		// Loop through courses we want
@@ -336,6 +334,7 @@ public class ScheduleStacker {
 			// Process stuff
 			System.out.println(wantedCourses);
 			computeSchedules();
+			doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
 			progressBar.setIndeterminate(false);
 		}
 	}
