@@ -22,6 +22,14 @@ public class SpecificCourse {
 		this.room = room;
 	}
 
+	public String getCourseName() {
+		return courseName;
+	}
+
+	public int getSemester() {
+		return semester;
+	}
+
 	public String getTeacherLast() {
 		return teacherLast;
 	}
@@ -30,8 +38,8 @@ public class SpecificCourse {
 		return teacherFirst;
 	}
 
-	public String getCourseName() {
-		return courseName;
+	public String getRoom() {
+		return room;
 	}
 
 }

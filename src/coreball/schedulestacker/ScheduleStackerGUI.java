@@ -38,8 +38,26 @@ public class ScheduleStackerGUI extends JFrame {
 	private JCheckBox checkPeriod6;
 	private JCheckBox checkPeriod7;
 	private JCheckBox checkPeriod8;
-	private JTable resultsTable;
 	private JCheckBox[] checkPeriodArray;
+	private JTable resultsTable;
+	private JLabel scheduleNumberLbl;
+	private JLabel period1Lbl_1;
+	private JLabel period2Lbl_1;
+	private JLabel period3Lbl_1;
+	private JLabel period4Lbl_1;
+	private JLabel period5Lbl_1;
+	private JLabel period6Lbl_1;
+	private JLabel period7Lbl_1;
+	private JLabel period8Lbl_1;
+	private JLabel period1Lbl_2;
+	private JLabel period2Lbl_2;
+	private JLabel period3Lbl_2;
+	private JLabel period4Lbl_2;
+	private JLabel period5Lbl_2;
+	private JLabel period6Lbl_2;
+	private JLabel period7Lbl_2;
+	private JLabel period8Lbl_2;
+	private JLabel[] periodLblArray;
 
 	public ScheduleStackerGUI() {
 		setContentPane(mainPanel);
@@ -53,6 +71,7 @@ public class ScheduleStackerGUI extends JFrame {
 		setSize(1200, 750);
 		makeCheckPeriodArray();
 		makeTypeListArray(); // FORGOT THIS
+		makePeriodLblArray(); // FORGOT THIS TOO ON A DIFFERENT DAY
 	}
 
 	/**
@@ -85,6 +104,30 @@ public class ScheduleStackerGUI extends JFrame {
 		typeListArray[7] = type8;
 	}
 
+	/**
+	 * Prepare array of the period labels aka the detailed period descriptions
+	 */
+	private void makePeriodLblArray() {
+		periodLblArray = new JLabel[17];
+		periodLblArray[0] = scheduleNumberLbl;
+		periodLblArray[1] = period1Lbl_1;
+		periodLblArray[2] = period2Lbl_1;
+		periodLblArray[3] = period3Lbl_1;
+		periodLblArray[4] = period4Lbl_1;
+		periodLblArray[5] = period5Lbl_1;
+		periodLblArray[6] = period6Lbl_1;
+		periodLblArray[7] = period7Lbl_1;
+		periodLblArray[8] = period8Lbl_1;
+		periodLblArray[9] = period1Lbl_2; // Perhaps store in 2D array instead?
+		periodLblArray[10] = period2Lbl_2;
+		periodLblArray[11] = period3Lbl_2;
+		periodLblArray[12] = period4Lbl_2;
+		periodLblArray[13] = period5Lbl_2;
+		periodLblArray[14] = period6Lbl_2;
+		periodLblArray[15] = period7Lbl_2;
+		periodLblArray[16] = period8Lbl_2;
+	}
+
 	public JButton getFindFileButton() {
 		return findFileButton;
 	}
@@ -107,6 +150,10 @@ public class ScheduleStackerGUI extends JFrame {
 
 	public JList<NamedCourse>[] getTypeListArray() {
 		return typeListArray;
+	}
+
+	public JLabel[] getPeriodLblArray() {
+		return periodLblArray;
 	}
 
 	public JTable getResultsTable() {

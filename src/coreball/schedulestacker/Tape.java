@@ -64,6 +64,15 @@ public class Tape extends AbstractTableModel {
 	}
 
 	/**
+	 * Get a specific finished schedule
+	 * @param row which FinishedSchedule to fetch
+	 * @return the finished schedule
+	 */
+	public FinishedSchedule getFinishedSchedule(int row) {
+		return finishedSchedules.get(row);
+	}
+
+	/**
 	 * Finished schedule of 8 periods
 	 */
 	public static class FinishedSchedule {
@@ -87,6 +96,11 @@ public class Tape extends AbstractTableModel {
 			}
 		}
 
+		/**
+		 * Get the column, for use in the table view
+		 * @param col the column
+		 * @return string representing course(s) that period
+		 */
 		private String getCol(int col) {
 			if(col >= finishedCourses.size()) { // Probably not needed but safeguards are cool
 				return null;
@@ -108,6 +122,15 @@ public class Tape extends AbstractTableModel {
 					return "-";
 				}
 			}
+		}
+
+		/**
+		 * Get the raw list of specific courses in a period
+		 * @param period the period
+		 * @return a list containing either 0 (off), 1 (year), or 2 (semesters) specific courses
+		 */
+		public ArrayList<SpecificCourse> getSpecificCoursesForPeriod(int period) {
+			return finishedCourses.get(period - 1);
 		}
 
 		public boolean alreadyContains(NamedCourse namedCourse) {

@@ -4,6 +4,8 @@ import coreball.schedulestacker.Glue.NamedCourse;
 import coreball.schedulestacker.Tape.FinishedSchedule;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -31,6 +33,7 @@ public class ScheduleStacker {
 	private JList<NamedCourse>[] typeListShells;
 	private ArrayList<DefaultListModel<NamedCourse>> typeListInternals;
 	private JTable resultsTable;
+	private JLabel[] periodDescriptions;
 
 	// Computational data structures
 	private Glue allClasses;
@@ -69,6 +72,7 @@ public class ScheduleStacker {
 
 		resultsTable = gui.getResultsTable();
 		initResultsTable();
+		periodDescriptions = gui.getPeriodLblArray();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 
@@ -97,6 +101,8 @@ public class ScheduleStacker {
 	private void initResultsTable() {
 		resultsTable.setModel(doneSchedules);
 		resultsTable.getTableHeader().setReorderingAllowed(false);
+		resultsTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		resultsTable.getSelectionModel().addListSelectionListener(new resultsTableListener());
 	}
 
 	/**
@@ -343,11 +349,60 @@ public class ScheduleStacker {
 				// Process stuff
 				computeSchedules();
 				doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
-				JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
+				if(doneSchedules.getRowCount() > 0) {
+					JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
+					resultsTable.setRowSelectionInterval(0, 0); // Auto-select first schedule
+				} else {
+					JOptionPane.showMessageDialog(gui, "No schedules found!!", "Done", JOptionPane.INFORMATION_MESSAGE);
+					periodDescriptions[0].setText("0/0");
+					for(int period = 1; period < periodDescriptions.length; period++) {
+						periodDescriptions[period].setText(""); // Clear up last run details
+					}
+				}
 			} else {
-				JOptionPane.showMessageDialog(gui, "No courses selected!", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(gui, "No courses selected!!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			gui.setCursor(Cursor.getDefaultCursor());
+		}
+	}
+
+	private class resultsTableListener implements ListSelectionListener {
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(resultsTable.getSelectedRow() < 0) { // Don't error when generating new schedules again and table is empty
+				return;
+			}
+			FinishedSchedule selected = doneSchedules.getFinishedSchedule(resultsTable.getSelectedRow());
+			periodDescriptions[0].setText((resultsTable.getSelectedRow() + 1) + "/" + doneSchedules.getRowCount());
+
+			for(int period = 1; period <= 8; period++) { // Update the descriptions for each period
+				ArrayList<SpecificCourse> thisPeriod = selected.getSpecificCoursesForPeriod(period);
+				if(thisPeriod.size() == 1) {
+					SpecificCourse yearlong = thisPeriod.get(0);
+					periodDescriptions[period].setText("YR:   " + yearlong.getCourseName() + "  -  " + yearlong.getTeacherLast()
+							+ ", " + yearlong.getTeacherFirst() + "  -  " + yearlong.getRoom());
+					periodDescriptions[period + 8].setText(""); // MUST CLEAR
+				} else if(thisPeriod.size() == 2) {
+					SpecificCourse s1 = thisPeriod.get(0);
+					SpecificCourse s2 = thisPeriod.get(1);
+					if(s1 != null && s2 != null) {
+						periodDescriptions[period].setText("S1:   " + s1.getCourseName() + "  -  " + s1.getTeacherLast()
+								+ ", " + s1.getTeacherFirst() + "  -  " + s1.getRoom());
+						periodDescriptions[period + 8].setText("S2:   " + s2.getCourseName() + s2.getTeacherLast()
+								+ ", " + s2.getTeacherFirst() + "  -  " + s2.getRoom());
+					} else if(s1 != null) {
+						periodDescriptions[period].setText("S1:   " + s1.getCourseName() + "  -  " + s1.getTeacherLast()
+								+ ", " + s1.getTeacherFirst() + "  -  " + s1.getRoom());
+						periodDescriptions[period + 8].setText("S2:   OFF");
+					} else {
+						periodDescriptions[period].setText("S1:   OFF");
+						periodDescriptions[period + 8].setText("S2:   " + s2.getCourseName() + "  -  " + s2.getTeacherLast()
+								+ ", " + s2.getTeacherFirst() + "  -  " + s2.getRoom());
+					}
+				} else {
+					periodDescriptions[period].setText("YR:   OFF");
+				}
+			}
 		}
 	}
 
