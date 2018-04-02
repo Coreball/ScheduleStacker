@@ -4,11 +4,13 @@ import coreball.schedulestacker.Glue.NamedCourse;
 import coreball.schedulestacker.Tape.FinishedSchedule;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -52,7 +54,8 @@ public class ScheduleStacker {
 	 */
 	private void initComponents() {
 		gui = new ScheduleStackerGUI();
-		fileChooser = new JFileChooser(); // TODO Add filter for only .txt
+		fileChooser = new JFileChooser();
+		fileChooser.setFileFilter(new FileNameExtensionFilter("Master Schedule CSV (*.csv)", "csv"));
 		findFileButton = gui.getFindFileButton();
 		loadFileButton = gui.getLoadFileButton();
 		processButton = gui.getProcessButton();
@@ -61,7 +64,6 @@ public class ScheduleStacker {
 		typeListInternals = new ArrayList<>();
 		initTypeListInternals();
 
-		allClasses = new Glue();
 		doneSchedules = new Tape();
 		wantedCourses = new ArrayList<>();
 
@@ -101,9 +103,13 @@ public class ScheduleStacker {
 	 * Load a Master Schedule
 	 * @param in file to be read
 	 */
-	private void loadFile(File in) {
+	private void loadFile(String in) {
+		if(in.isEmpty()) { // Show an error if no file is selected
+			JOptionPane.showMessageDialog(gui, "Select a file first!!", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		try {
-			Scanner sc = new Scanner(in);
+			Scanner sc = new Scanner(new File(in));
 			while(sc.hasNextLine()) {
 				String line = sc.nextLine();
 				if(!line.isEmpty() && line.charAt(0) != '#') { // Ignore pound signs
@@ -195,7 +201,7 @@ public class ScheduleStacker {
 	 * Compute the schedules and place them in doneSchedules
 	 */
 	private void computeSchedules() {
-		doneSchedules.reset(); // Clean up table
+		doneSchedules.reset(); // Clean up table, reset() so we don't need to initialize table again
 		computeForPeriod(new FinishedSchedule(), 1); // Ignite the fire.
 	}
 
@@ -319,8 +325,8 @@ public class ScheduleStacker {
 	private class loadFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			File file = new File(filePathField.getText());
-			loadFile(file);
+			allClasses = new Glue(); // Clear out allClasses when loading a new file
+			loadFile(filePathField.getText());
 			updateTypeLists();
 		}
 	}
