@@ -123,24 +123,25 @@ public class ScheduleStacker {
 	 * @param line singular line ripped from Master Schedule
 	 */
 	private void lineToGlue(String line) {
-		if(!Character.isDigit(line.charAt(0))) { // Die if not a number, warn user something is wrong
-			throw new IllegalArgumentException();
-		}
+		String[] parts = line.split(","); // MUCH EASIER THAN PROCESSING EVERY TIME
 		try {
-			int type = Character.getNumericValue(line.charAt(0));
-			String firstBit = line.substring(0, line.indexOf("(A-"));
-			String secondBit = line.substring(line.lastIndexOf(')') + 1).trim(); // last index b/c (Teamed) is a course name
-			int semester = 0;
-			if(secondBit.charAt(0) == 'S') { // Set specific semester if isn't year-round
-				semester = Character.getNumericValue(secondBit.charAt(1));
+			int type = Integer.parseInt(parts[0]);
+			String courseName = parts[1];
+			String period = parts[2];
+			int semester;
+			switch(parts[3]) {
+				case "S1": semester = 1; break;
+				case "S2": semester = 2; break;
+				default: semester = 0;
 			}
-			secondBit = secondBit.substring(secondBit.indexOf(' ') + 1); // Advance to teacher's last name
-			String courseName = firstBit.substring(2, firstBit.lastIndexOf(" "));
-			String period = firstBit.substring(firstBit.lastIndexOf(' ') + 1);
-			String teacher = secondBit.substring(0, secondBit.indexOf(' ') - 1);
-			allClasses.type(type).getNamedCourse(courseName).sem(semester).getTeachersForPeriod(period).addTeacher(courseName, semester, period, teacher);
+			String teacherLast = parts[4];
+			String teacherFirst = parts[5];
+			String room = parts[6];
+			allClasses.type(type).getNamedCourse(courseName).sem(semester).getTeachersForPeriod(period)
+					.addTeacher(courseName, semester, period, teacherLast, teacherFirst, room);
 		} catch(Exception e) {
-			throw new IllegalArgumentException(); // TODO test this
+			e.printStackTrace();
+			throw new IllegalArgumentException();
 		}
 	}
 

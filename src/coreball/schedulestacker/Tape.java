@@ -93,16 +93,16 @@ public class Tape extends AbstractTableModel {
 			} else {
 				if(finishedCourses.get(col).size() == 1) {
 					SpecificCourse yearlong = finishedCourses.get(col).get(0);
-					return yearlong.getCourseName() + " - " + yearlong.getTeacher();
+					return yearlong.getCourseName() + " - " + yearlong.getTeacherLast();
 				} else if(finishedCourses.get(col).size() == 2) {
 					SpecificCourse s1 = finishedCourses.get(col).get(0);
 					SpecificCourse s2 = finishedCourses.get(col).get(1);
 					if(s1 != null && s2 != null) {
-						return s1.getCourseName() + "/" + s2.getCourseName() + "; " + s1.getTeacher() + "/" + s2.getTeacher();
+						return s1.getCourseName() + "/" + s2.getCourseName() + "; " + s1.getTeacherLast() + "/" + s2.getTeacherLast();
 					} else if(s1 != null) {
-						return s1.getCourseName() + "/" + "-" + "; " + s1.getTeacher() + "/" + "-";
+						return s1.getCourseName() + "/" + "-" + "; " + s1.getTeacherLast() + "/" + "-";
 					} else {
-						return "-" + "/" + s2.getCourseName() + "; " + "-" + "/" + s2.getTeacher();
+						return "-" + "/" + s2.getCourseName() + "; " + "-" + "/" + s2.getTeacherLast();
 					} // TODO evaluate best way to convey that one semester has no classes
 				} else {
 					return "-";

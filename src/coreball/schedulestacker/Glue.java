@@ -135,15 +135,20 @@ public class Glue {
 		/**
 		 * Adds specific course with specific teacher if needed
 		 * @param courseName name of course
-		 * @param teacher the teacher
+		 * @param semester semester
+		 * @param period period of specific course
+		 * @param teacherLast teacher's last name
+		 * @param teacherFirst teacher's first name and middle initial
+		 * @param room room where specific course is located
 		 */
-		public void addTeacher(String courseName, int semester, String period, String teacher) {
+		public void addTeacher(String courseName, int semester, String period, String teacherLast, String teacherFirst, String room) {
 			for(SpecificCourse specificCourse : specificCourses) {
-				if(specificCourse.getTeacher().equals(teacher)) {
+				if(specificCourse.getTeacherLast().equals(teacherLast)
+						&& specificCourse.getTeacherFirst().equals(teacherFirst)) {
 					return;
 				}
 			}
-			specificCourses.add(new SpecificCourse(courseName, semester, period, teacher));
+			specificCourses.add(new SpecificCourse(courseName, semester, period, teacherLast, teacherFirst, room));
 		}
 
 		public ArrayList<SpecificCourse> getSpecificCourses() {
