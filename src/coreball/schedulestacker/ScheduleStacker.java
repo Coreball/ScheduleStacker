@@ -354,8 +354,7 @@ public class ScheduleStacker {
 					resultsTable.setRowSelectionInterval(0, 0); // Auto-select first schedule
 				} else {
 					JOptionPane.showMessageDialog(gui, "No schedules found!!", "Done", JOptionPane.INFORMATION_MESSAGE);
-					periodDescriptions[0].setText("0/0");
-					for(int period = 1; period < periodDescriptions.length; period++) {
+					for(int period = 0; period < periodDescriptions.length; period++) {
 						periodDescriptions[period].setText(""); // Clear up last run details
 					}
 				}
@@ -388,7 +387,7 @@ public class ScheduleStacker {
 					if(s1 != null && s2 != null) {
 						periodDescriptions[period].setText("S1:   " + s1.getCourseName() + "  -  " + s1.getTeacherLast()
 								+ ", " + s1.getTeacherFirst() + "  -  " + s1.getRoom());
-						periodDescriptions[period + 8].setText("S2:   " + s2.getCourseName() + s2.getTeacherLast()
+						periodDescriptions[period + 8].setText("S2:   " + s2.getCourseName() + "  -  " + s2.getTeacherLast()
 								+ ", " + s2.getTeacherFirst() + "  -  " + s2.getRoom());
 					} else if(s1 != null) {
 						periodDescriptions[period].setText("S1:   " + s1.getCourseName() + "  -  " + s1.getTeacherLast()
@@ -401,6 +400,7 @@ public class ScheduleStacker {
 					}
 				} else {
 					periodDescriptions[period].setText("YR:   OFF");
+					periodDescriptions[period + 8].setText(""); // MUST CLEAR
 				}
 			}
 		}
