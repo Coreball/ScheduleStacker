@@ -1,3 +1,3 @@
 # ScheduleStacker Website
 
-I seem to have forgotten a lot of HTML
+https://coreball.github.io/ScheduleStacker/
