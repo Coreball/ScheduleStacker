@@ -36,7 +36,9 @@ Master Schedule: [2017-2018 TXT](https://github.com/Coreball/ScheduleStacker/rel
 
 ### About
 
-[GitHub Repository](https://github.com/Coreball/ScheduleStacker)
+[GitHub Repository](https://github.com/Coreball/ScheduleStacker)  
+
+[Additional Information](https://youtu.be/dQw4w9WgXcQ)
 
 Created by Changyuan Lin [@Coreball](https://github.com/Coreball)  
 Email: <clin3@cherrycreekschools.org>
