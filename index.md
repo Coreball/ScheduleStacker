@@ -3,6 +3,9 @@ layout: page
 title: ScheduleStacker
 ---
 
+**YOU NEED A COMPUTER WITH JAVA (YOU PROBABLY ALREADY HAVE IT) FOR THIS**  
+**DOWNLOAD JAR AND CSV UNDER LATEST. RUN JAR FILE. FOLLOW DIRECTIONS BELOW**
+
 ScheduleStacker is tool for finding all permutations of course schedules to aid in the self-registration process.  
 Tell your friends! Tell everyone!!
 
