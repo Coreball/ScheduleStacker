@@ -3,6 +3,7 @@ package coreball.schedulestacker;
 import coreball.schedulestacker.Glue.NamedCourse;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * GUI shell for ScheduleStacker
@@ -68,7 +69,9 @@ public class ScheduleStackerGUI extends JFrame {
 			JOptionPane.showMessageDialog(this, "Unable to set look and feel for some reason");
 		}
 		SwingUtilities.updateComponentTreeUI(this);
-		setSize(1200, 750);
+		pack();
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize(screenSize.width * 4/5, screenSize.height * 4/5);
 		makeCheckPeriodArray();
 		makeTypeListArray(); // FORGOT THIS
 		makePeriodLblArray(); // FORGOT THIS TOO ON A DIFFERENT DAY
