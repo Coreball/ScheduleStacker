@@ -23,7 +23,7 @@ import java.util.Scanner;
  */
 public class ScheduleStacker {
 
-	// Some things
+	// GUI Components
 	private ScheduleStackerGUI gui;
 	private JFileChooser fileChooser;
 	private JButton findFileButton;
@@ -35,7 +35,7 @@ public class ScheduleStacker {
 	private JTable resultsTable;
 	private JLabel[] periodDescriptions;
 
-	// Computational data structures
+	// Storage Components
 	private Glue allClasses;
 	private Tape doneSchedules;
 	private ArrayList<NamedCourse> wantedCourses;
@@ -101,6 +101,7 @@ public class ScheduleStacker {
 	private void initResultsTable() {
 		resultsTable.setModel(doneSchedules);
 		resultsTable.getTableHeader().setReorderingAllowed(false);
+		resultsTable.setAutoCreateRowSorter(true);
 		resultsTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		resultsTable.getSelectionModel().addListSelectionListener(new resultsTableListener());
 	}

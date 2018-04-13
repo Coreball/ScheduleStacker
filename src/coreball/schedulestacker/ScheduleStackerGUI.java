@@ -58,6 +58,8 @@ public class ScheduleStackerGUI extends JFrame {
 	private JLabel period6Lbl_2;
 	private JLabel period7Lbl_2;
 	private JLabel period8Lbl_2;
+	private JTextField includeField;
+	private JTextField excludeField;
 	private JLabel[] periodLblArray;
 
 	public ScheduleStackerGUI() {
