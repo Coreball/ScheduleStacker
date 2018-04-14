@@ -4,15 +4,17 @@ import coreball.schedulestacker.Glue.NamedCourse;
 import coreball.schedulestacker.Tape.FinishedSchedule;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -30,6 +32,8 @@ public class ScheduleStacker {
 	private JButton loadFileButton;
 	private JButton processButton;
 	private JTextField filePathField;
+	private JTextField includeField;
+	private JTextField excludeField;
 	private JList<NamedCourse>[] typeListShells;
 	private ArrayList<DefaultListModel<NamedCourse>> typeListInternals;
 	private JTable resultsTable;
@@ -39,6 +43,7 @@ public class ScheduleStacker {
 	private Glue allClasses;
 	private Tape doneSchedules;
 	private ArrayList<NamedCourse> wantedCourses;
+	private ResultsTableRowFilter resultsTableRowFilter;
 
 	// User input
 	private boolean[] offPeriodsDesired;
@@ -63,6 +68,8 @@ public class ScheduleStacker {
 		loadFileButton = gui.getLoadFileButton();
 		processButton = gui.getProcessButton();
 		filePathField = gui.getFilePathField();
+		includeField = gui.getIncludeField();
+		excludeField = gui.getExcludeField();
 		typeListShells = gui.getTypeListArray();
 		typeListInternals = new ArrayList<>();
 		initTypeListInternals();
@@ -71,6 +78,7 @@ public class ScheduleStacker {
 		wantedCourses = new ArrayList<>();
 
 		resultsTable = gui.getResultsTable();
+		resultsTableRowFilter = new ResultsTableRowFilter();
 		initResultsTable();
 		periodDescriptions = gui.getPeriodLblArray();
 		gui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -80,9 +88,11 @@ public class ScheduleStacker {
 	 * Add the listeners for buttons used in ScheduleStacker
 	 */
 	private void initListeners() {
-		findFileButton.addActionListener(new findFileButtonListener());
-		loadFileButton.addActionListener(new loadFileButtonListener());
-		processButton.addActionListener(new processButtonListener());
+		findFileButton.addActionListener(new FindFileButtonListener());
+		loadFileButton.addActionListener(new LoadFileButtonListener());
+		processButton.addActionListener(new ProcessButtonListener());
+		includeField.getDocument().addDocumentListener(new IncludeFieldListener());
+		excludeField.getDocument().addDocumentListener(new ExcludeFieldListener());
 	}
 
 	/**
@@ -102,8 +112,9 @@ public class ScheduleStacker {
 		resultsTable.setModel(doneSchedules);
 		resultsTable.getTableHeader().setReorderingAllowed(false);
 		resultsTable.setAutoCreateRowSorter(true);
+		((TableRowSorter<Tape>)resultsTable.getRowSorter()).setRowFilter(resultsTableRowFilter);
 		resultsTable.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		resultsTable.getSelectionModel().addListSelectionListener(new resultsTableListener());
+		resultsTable.getSelectionModel().addListSelectionListener(new ResultsTableListener());
 	}
 
 	/**
@@ -319,7 +330,7 @@ public class ScheduleStacker {
 		}
 	}
 
-	private class findFileButtonListener implements ActionListener {
+	private class FindFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			int reply = fileChooser.showOpenDialog(gui);
@@ -329,7 +340,7 @@ public class ScheduleStacker {
 		}
 	}
 
-	private class loadFileButtonListener implements ActionListener {
+	private class LoadFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			allClasses = new Glue(); // Clear out allClasses when loading a new file
@@ -338,7 +349,7 @@ public class ScheduleStacker {
 		}
 	}
 
-	private class processButtonListener implements ActionListener {
+	private class ProcessButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			gui.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -349,6 +360,11 @@ public class ScheduleStacker {
 			if(wantedCourses.size() > 0) {
 				// Process stuff
 				computeSchedules();
+				resultsTable.getRowSorter().setSortKeys(null); // Reset the column sorts
+				resultsTableRowFilter.setInclude(new String[0]); // Reset filters so don't error
+				resultsTableRowFilter.setExclude(new String[0]);
+				includeField.setText("");
+				excludeField.setText("");
 				doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
 				if(doneSchedules.getRowCount() > 0) {
 					JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
@@ -366,14 +382,19 @@ public class ScheduleStacker {
 		}
 	}
 
-	private class resultsTableListener implements ListSelectionListener {
+	private class ResultsTableListener implements ListSelectionListener {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(resultsTable.getSelectedRow() < 0) { // Don't error when generating new schedules again and table is empty
 				return;
 			}
-			FinishedSchedule selected = doneSchedules.getFinishedSchedule(resultsTable.getSelectedRow());
-			periodDescriptions[0].setText((resultsTable.getSelectedRow() + 1) + "/" + doneSchedules.getRowCount());
+
+			int absoluteRow = resultsTable.convertRowIndexToModel(resultsTable.getSelectedRow());
+
+			FinishedSchedule selected = doneSchedules.getFinishedSchedule(absoluteRow);
+
+			// Set Schedule ID text, make sure to do absolutely instead of what's in the view
+			periodDescriptions[0].setText(absoluteRow + "/" + doneSchedules.getRowCount());
 
 			for(int period = 1; period <= 8; period++) { // Update the descriptions for each period
 				ArrayList<SpecificCourse> thisPeriod = selected.getSpecificCoursesForPeriod(period);
@@ -404,6 +425,77 @@ public class ScheduleStacker {
 					periodDescriptions[period + 8].setText(""); // MUST CLEAR
 				}
 			}
+		}
+	}
+
+	private class ResultsTableRowFilter extends RowFilter<Tape, Integer> {
+
+		private String[] include = {};
+		private String[] exclude = {};
+
+		@Override
+		public boolean include(Entry<? extends Tape, ? extends Integer> entry) {
+			FinishedSchedule schedule = entry.getModel().getFinishedSchedule(entry.getIdentifier());
+
+			if(include.length > 0 && exclude.length > 0) {
+				return schedule.hasTeachers(include) && schedule.noHasTeachers(exclude);
+			} else if(include.length > 0) {
+				return schedule.hasTeachers(include);
+			} else if(exclude.length > 0) {
+				return schedule.noHasTeachers(exclude);
+			} else {
+				return true;
+			}
+		}
+
+		public void setInclude(String[] include) {
+			this.include = include;
+		}
+		public void setExclude(String[] exclude) {
+			this.exclude = exclude;
+		}
+
+	}
+
+	private class IncludeFieldListener implements DocumentListener {
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			changedUpdate(e);
+		}
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			changedUpdate(e);
+		}
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			System.out.println("Include: " + includeField.getText());
+			if(!includeField.getText().isEmpty()) {
+				resultsTableRowFilter.setInclude(includeField.getText().trim().split("\\s*,\\s*")); // split by comma & kill whitespace
+			} else {
+				resultsTableRowFilter.setInclude(new String[0]);
+			}
+			doneSchedules.fireTableDataChanged();
+		}
+	}
+
+	private class ExcludeFieldListener implements DocumentListener {
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			changedUpdate(e);
+		}
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			changedUpdate(e);
+		}
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			System.out.println("Exclude: " + excludeField.getText());
+			if(!excludeField.getText().isEmpty()) {
+				resultsTableRowFilter.setExclude(excludeField.getText().trim().split("\\s*,\\s*"));
+			} else {
+				resultsTableRowFilter.setExclude(new String[0]);
+			}
+			doneSchedules.fireTableDataChanged();
 		}
 	}
 

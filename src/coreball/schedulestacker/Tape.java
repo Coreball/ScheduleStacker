@@ -133,6 +133,11 @@ public class Tape extends AbstractTableModel {
 			return finishedCourses.get(period - 1);
 		}
 
+		/**
+		 * See if this course is already contained inside this schedule
+		 * @param namedCourse course
+		 * @return true if already contained
+		 */
 		public boolean alreadyContains(NamedCourse namedCourse) {
 			for(ArrayList<SpecificCourse> periods : finishedCourses) {
 				for(SpecificCourse course : periods) {
@@ -144,10 +149,65 @@ public class Tape extends AbstractTableModel {
 			return false;
 		}
 
+		/**
+		 * Returns if this schedule contains this teacher in any period
+		 * @param teacher teacher's last name
+		 * @return true if has teacher
+		 */
+		public boolean hasTeacher(String teacher) {
+			for(ArrayList<SpecificCourse> periods : finishedCourses) {
+				for(SpecificCourse course : periods) {
+					if(course != null && course.getTeacherLast().equalsIgnoreCase(teacher)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Returns if this schedule contains all of the teachers given in any period
+		 * @param teachers array of teachers
+		 * @return true if all teachers appear
+		 */
+		public boolean hasTeachers(String[] teachers) {
+			for(String teacher : teachers) {
+				if(!hasTeacher(teacher)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * Returns if this schedule does not contain any of the teachers given
+		 * @param teachers array of teachers
+		 * @return true if no teacher appears
+		 */
+		public boolean noHasTeachers(String[] teachers) {
+			for(String teacher : teachers) {
+				if(hasTeacher(teacher)) {
+					return false;
+				}
+			}
+			return true;
+		}
+
+		/**
+		 * Add a yearlong course
+		 * @param period period to add
+		 * @param course specific course to add
+		 */
 		public void addYearlong(int period, SpecificCourse course) { // For multiple periods call this twice
 			finishedCourses.get(period - 1).add(course);
 		}
 
+		/**
+		 * Add two semester-long courses
+		 * @param period period to add
+		 * @param s1 first semester
+		 * @param s2 second semester
+		 */
 		public void addSemesters(int period, SpecificCourse s1, SpecificCourse s2) {
 			finishedCourses.get(period - 1).add(s1);
 			finishedCourses.get(period - 1).add(s2);

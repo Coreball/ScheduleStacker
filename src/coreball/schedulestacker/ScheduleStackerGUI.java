@@ -4,6 +4,7 @@ import coreball.schedulestacker.Glue.NamedCourse;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeListener;
 
 /**
  * GUI shell for ScheduleStacker
@@ -21,6 +22,8 @@ public class ScheduleStackerGUI extends JFrame {
 	private JButton findFileButton;
 	private JButton loadFileButton;
 	private JTextField filePathField;
+	private JTextField includeField;
+	private JTextField excludeField;
 	private JButton processButton;
 	private JList<NamedCourse> type1;
 	private JList<NamedCourse> type2;
@@ -58,8 +61,6 @@ public class ScheduleStackerGUI extends JFrame {
 	private JLabel period6Lbl_2;
 	private JLabel period7Lbl_2;
 	private JLabel period8Lbl_2;
-	private JTextField includeField;
-	private JTextField excludeField;
 	private JLabel[] periodLblArray;
 
 	public ScheduleStackerGUI() {
@@ -147,6 +148,14 @@ public class ScheduleStackerGUI extends JFrame {
 
 	public JTextField getFilePathField() {
 		return filePathField;
+	}
+
+	public JTextField getIncludeField() {
+		return includeField;
+	}
+
+	public JTextField getExcludeField() {
+		return excludeField;
 	}
 
 	public JCheckBox[] getCheckPeriodArray() {
