@@ -394,7 +394,7 @@ public class ScheduleStacker {
 			FinishedSchedule selected = doneSchedules.getFinishedSchedule(absoluteRow);
 
 			// Set Schedule ID text, make sure to do absolutely instead of what's in the view
-			periodDescriptions[0].setText(absoluteRow + "/" + doneSchedules.getRowCount());
+			periodDescriptions[0].setText((absoluteRow + 1) + "/" + doneSchedules.getRowCount());
 
 			for(int period = 1; period <= 8; period++) { // Update the descriptions for each period
 				ArrayList<SpecificCourse> thisPeriod = selected.getSpecificCoursesForPeriod(period);
