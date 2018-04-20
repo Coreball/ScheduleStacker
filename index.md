@@ -46,6 +46,9 @@ Master Schedule: [2017-2018 TXT](https://github.com/Coreball/ScheduleStacker/rel
 I can't figure out how to select multiple courses in the same box  
 - Hold CTRL and click  
 
+Can't be opened because it is from an unidentified developer
+- Try opening terminal and going to wherever you downloaded the .jar with `cd [Path to folder where .jar was saved]`. Run it directly with `java -jar ScheduleStacker_v1.2.0.jar`
+
 It doesn't WORK!  
 - Contact me with whatever issues you're experiencing. I want to help!  
 
