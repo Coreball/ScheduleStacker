@@ -64,12 +64,13 @@ public class ScheduleStackerGUI extends JFrame {
 	private JLabel[] periodLblArray;
 
 	public ScheduleStackerGUI() {
+		System.out.println("Initializing ScheduleStackerGUI");
 		setContentPane(mainPanel);
 		setTitle("ScheduleStacker");
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch(ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-			JOptionPane.showMessageDialog(this, "Unable to set look and feel for some reason");
+			System.out.println("Unable to set look and feel");
 		}
 		SwingUtilities.updateComponentTreeUI(this);
 		pack();

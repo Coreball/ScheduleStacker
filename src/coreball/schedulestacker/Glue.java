@@ -24,6 +24,7 @@ public class Glue {
 	 */
 
 	public Glue() {
+		System.out.println("Initalizing Glue");
 		sticky = new ArrayList<>();
 		for(int i = 0; i < 8; i++) {
 			sticky.add(new CourseList());

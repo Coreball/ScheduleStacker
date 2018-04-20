@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -49,6 +50,7 @@ public class ScheduleStacker {
 	private boolean[] offPeriodsDesired;
 
 	public ScheduleStacker() {
+		System.out.println("Initializing ScheduleStacker");
 		initComponents();
 		initListeners();
 	}
@@ -123,6 +125,7 @@ public class ScheduleStacker {
 	 */
 	private void loadFile(String in) {
 		if(in.isEmpty()) { // Show an error if no file is selected
+			System.out.println("Tried to load file, but none was selected");
 			JOptionPane.showMessageDialog(gui, "Select a file first!!", "Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
@@ -131,13 +134,15 @@ public class ScheduleStacker {
 			while(sc.hasNextLine()) {
 				String line = sc.nextLine();
 				if(!line.isEmpty() && line.charAt(0) != '#') { // Ignore pound signs
-					System.out.println(line);
+					System.out.println("Processing line: " + line);
 					lineToGlue(line);
 				}
 			}
 		} catch(FileNotFoundException e) {
+			System.out.println("File not found");
 			JOptionPane.showMessageDialog(gui, "File not found!!", "Error", JOptionPane.ERROR_MESSAGE);
 		} catch(IllegalArgumentException e) {
+			System.out.println("File formatted incorrectly");
 			JOptionPane.showMessageDialog(gui, "File formatted incorrectly!!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -238,6 +243,7 @@ public class ScheduleStacker {
 					return;
 				}
 			}
+			System.out.println("Adding FinishedSchedule: " + prevSchedule);
 			doneSchedules.addFinishedSchedule(prevSchedule);
 			return; // Do not do more computation for this specific schedule
 		}
@@ -354,12 +360,13 @@ public class ScheduleStacker {
 		public void actionPerformed(ActionEvent e) {
 			gui.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			findOffPeriods();
+			System.out.println("Requesting off periods: " + Arrays.toString(offPeriodsDesired));
 			findWantedCourses();
-			System.out.println(wantedCourses);
-			System.out.println(wantedCourses.size());
+			System.out.println("Requesting courses: " + wantedCourses);
 			if(wantedCourses.size() > 0) {
 				// Process stuff
 				computeSchedules();
+				System.out.println("Finished computing schedules");
 				resultsTable.getRowSorter().setSortKeys(null); // Reset the column sorts
 				resultsTableRowFilter.setInclude(new String[0]); // Reset filters so don't error
 				resultsTableRowFilter.setExclude(new String[0]);
@@ -367,15 +374,18 @@ public class ScheduleStacker {
 				excludeField.setText("");
 				doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
 				if(doneSchedules.getRowCount() > 0) {
+					System.out.println(doneSchedules.getRowCount() + " Schedules Found");
 					JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
 					resultsTable.setRowSelectionInterval(0, 0); // Auto-select first schedule
 				} else {
+					System.out.println("No schedules found");
 					JOptionPane.showMessageDialog(gui, "No schedules found!!", "Done", JOptionPane.INFORMATION_MESSAGE);
 					for(int period = 0; period < periodDescriptions.length; period++) {
 						periodDescriptions[period].setText(""); // Clear up last run details
 					}
 				}
 			} else {
+				System.out.println("No courses were selected");
 				JOptionPane.showMessageDialog(gui, "No courses selected!!", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 			gui.setCursor(Cursor.getDefaultCursor());

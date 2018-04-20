@@ -25,6 +25,7 @@ public class Tape extends AbstractTableModel {
 	 */
 
 	public Tape() {
+		System.out.println("Initializing Tape");
 		finishedSchedules = new ArrayList<>();
 	}
 
@@ -211,6 +212,14 @@ public class Tape extends AbstractTableModel {
 		public void addSemesters(int period, SpecificCourse s1, SpecificCourse s2) {
 			finishedCourses.get(period - 1).add(s1);
 			finishedCourses.get(period - 1).add(s2);
+		}
+
+		public String toString() {
+			String entireSchedule = "";
+			for(int i = 0; i < finishedCourses.size(); i++) {
+				entireSchedule += (i == 0 ? "" : "\t") + getCol(i);
+			}
+			return entireSchedule;
 		}
 
 	}
