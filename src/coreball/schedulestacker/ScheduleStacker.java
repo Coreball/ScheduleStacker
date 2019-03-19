@@ -49,6 +49,9 @@ public class ScheduleStacker {
 	// User input
 	private boolean[] offPeriodsDesired;
 
+	// Background solver
+	private BackgroundSolver task;
+
 	public ScheduleStacker() {
 		System.out.println("Initializing ScheduleStacker");
 		initComponents();
@@ -245,6 +248,7 @@ public class ScheduleStacker {
 			}
 			System.out.println("Adding FinishedSchedule: " + prevSchedule);
 			doneSchedules.addFinishedSchedule(prevSchedule);
+			processButton.setText("Found " + doneSchedules.getRowCount()); // Update the process button w/ number found
 			return; // Do not do more computation for this specific schedule
 		}
 
@@ -336,6 +340,46 @@ public class ScheduleStacker {
 		}
 	}
 
+	/**
+	 * Background worker task for solving schedules
+	 */
+	private class BackgroundSolver extends SwingWorker<Void, Void> {
+
+		@Override
+		public Void doInBackground() throws Exception {
+			// Process stuff
+			computeSchedules(); // Perhaps that method should be part of this class but whatever
+			return null;
+		}
+
+		@Override
+		public void done() {
+			System.out.println("Finished computing schedules");
+			resultsTable.getRowSorter().setSortKeys(null); // Reset the column sorts
+			resultsTableRowFilter.setInclude(new String[0]); // Reset filters so don't error
+			resultsTableRowFilter.setExclude(new String[0]);
+			includeField.setText("");
+			excludeField.setText("");
+			doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
+			if(doneSchedules.getRowCount() > 0) {
+				System.out.println(doneSchedules.getRowCount() + " Schedules Found");
+				JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
+				resultsTable.setRowSelectionInterval(0, 0); // Auto-select first schedule
+			} else {
+				System.out.println("No schedules found");
+				JOptionPane.showMessageDialog(gui, "No schedules found!!", "Done", JOptionPane.INFORMATION_MESSAGE);
+				for(int period = 0; period < periodDescriptions.length; period++) {
+					periodDescriptions[period].setText(""); // Clear up last run details
+				}
+			}
+			processButton.setText("Find Schedules"); // Reset the disabled buttons
+			processButton.setEnabled(true);
+			findFileButton.setEnabled(true);
+			loadFileButton.setEnabled(true);
+		}
+
+	}
+
 	private class FindFileButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -364,26 +408,11 @@ public class ScheduleStacker {
 			findWantedCourses();
 			System.out.println("Requesting courses: " + wantedCourses);
 			if(wantedCourses.size() > 0) {
-				// Process stuff
-				computeSchedules();
-				System.out.println("Finished computing schedules");
-				resultsTable.getRowSorter().setSortKeys(null); // Reset the column sorts
-				resultsTableRowFilter.setInclude(new String[0]); // Reset filters so don't error
-				resultsTableRowFilter.setExclude(new String[0]);
-				includeField.setText("");
-				excludeField.setText("");
-				doneSchedules.fireTableDataChanged(); // This gives the table a usable scroll bar w/o resizing the window to trigger appearance
-				if(doneSchedules.getRowCount() > 0) {
-					System.out.println(doneSchedules.getRowCount() + " Schedules Found");
-					JOptionPane.showMessageDialog(gui, doneSchedules.getRowCount() + " Schedules Found", "Done", JOptionPane.INFORMATION_MESSAGE);
-					resultsTable.setRowSelectionInterval(0, 0); // Auto-select first schedule
-				} else {
-					System.out.println("No schedules found");
-					JOptionPane.showMessageDialog(gui, "No schedules found!!", "Done", JOptionPane.INFORMATION_MESSAGE);
-					for(int period = 0; period < periodDescriptions.length; period++) {
-						periodDescriptions[period].setText(""); // Clear up last run details
-					}
-				}
+				task = new BackgroundSolver(); // Let's do it in the background
+				task.execute();
+				processButton.setEnabled(false); // Disable the buttons
+				findFileButton.setEnabled(false);
+				loadFileButton.setEnabled(false);
 			} else {
 				System.out.println("No courses were selected");
 				JOptionPane.showMessageDialog(gui, "No courses selected!!", "Error", JOptionPane.ERROR_MESSAGE);
