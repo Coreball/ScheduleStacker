@@ -3,8 +3,13 @@ layout: page
 title: ScheduleStacker
 ---
 
-**YOU NEED A COMPUTER WITH JAVA INSTALLED (YOU PROBABLY ALREADY HAVE IT)**  
-**DOWNLOAD LATEST JAR AND CSV BELOW. RUN JAR FILE. FOLLOW DIRECTIONS BELOW**
+***Update for 2020-2021***
+
+Hello again! I have been busy working on a completely new version of ScheduleStacker called schedulestacker-js, but it's not quite ready yet. In the meantime, feel free to use the original ScheduleStacker; I have provided the updated CSV file for 2020-2021. Good luck and stay safe!  
+
+
+**YOU NEED A COMPUTER WITH JAVA INSTALLED (YOU MAY ALREADY HAVE IT)**  
+**DOWNLOAD LATEST JAR AND CSV FILES BELOW. RUN JAR. SEE INSTRUCTIONS FOR USAGE**
 
 ScheduleStacker is tool for finding all permutations of course schedules to aid in the self-registration process.  
 
@@ -17,13 +22,14 @@ ScheduleStacker works by reading in a file containing the courses offered and st
 #### Latest (v1.2.1)
 
 ScheduleStacker: [v1.2.1](https://github.com/Coreball/ScheduleStacker/releases/download/v1.2.1/ScheduleStacker_v1.2.1.jar)  
-Master Schedule: [2019-2020 CSV](https://github.com/Coreball/ScheduleStacker/releases/download/v1.2.1/MasterSchedule20192020.csv)
+Master Schedule: [2020-2021 CSV](https://github.com/Coreball/ScheduleStacker/releases/download/v1.2.1/MasterSchedule20202021.csv)
 
 #### Older Versions
 
 ScheduleStacker: [v1.2.0](https://github.com/Coreball/ScheduleStacker/releases/download/v1.2.0/ScheduleStacker_v1.2.0.jar)  
 ScheduleStacker: [v1.1.0](https://github.com/Coreball/ScheduleStacker/releases/download/v1.1.0/ScheduleStacker_v1.1.0.jar)  
 ScheduleStacker: [v1.0.0](https://github.com/Coreball/ScheduleStacker/releases/download/v1.0.0/ScheduleStacker_v1.0.0.jar)  
+Master Schedule: [2019-2020 CSV](https://github.com/Coreball/ScheduleStacker/releases/download/v1.2.1/MasterSchedule20192020.csv)  
 Master Schedule: [2018-2019 CSV](https://github.com/Coreball/ScheduleStacker/releases/download/v1.1.0/MasterSchedule20182019.csv)  
 Master Schedule: [2017-2018 CSV](https://github.com/Coreball/ScheduleStacker/releases/download/v1.0.0/MasterSchedule20172018.csv)  
 Master Schedule: [2017-2018 TXT](https://github.com/Coreball/ScheduleStacker/releases/download/v1.0.0/MasterSchedule20172018.txt)
@@ -52,7 +58,7 @@ I can't figure out how to select multiple courses in the same box, or how to des
 - Hold CTRL and click  
 
 The JAR can't be opened because it is from an unidentified developer
-- Try opening terminal and going to wherever you downloaded the .jar with `cd [Insert path to folder where .jar was saved]`. Run it directly with `java -jar ScheduleStacker_v1.2.1.jar`
+- Try opening terminal and going to wherever you downloaded the .jar with `cd <path to download location>`. Run it directly with `java -jar ScheduleStacker_v1.2.1.jar`
 
 It doesn't WORK!  
 - Contact me with whatever issues you're experiencing. I want to help!  
@@ -65,4 +71,4 @@ It doesn't WORK!
 [Additional Information](https://youtu.be/dQw4w9WgXcQ)
 
 Created by Changyuan Lin [@Coreball](https://github.com/Coreball)  
-Email: <clin3@cherrycreekschools.org>
+Email: ~~<clin3@cherrycreekschools.org>~~ <cl859@cornell.edu>
